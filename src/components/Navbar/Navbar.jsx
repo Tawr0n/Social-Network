@@ -4,11 +4,11 @@ const Navbar = () => {
     return (
         <nav className={s.nav}>
             <ul>
-                <li><a className={`${s.link} ${s.active}`} href="src/components/Navbar/Navbar#">Profile</a></li>
-                <li><a className={s.link} href="src/components/Navbar/Navbar#">Messages</a></li>
-                <li><a className={s.link} href="src/components/Navbar/Navbar#">News</a></li>
-                <li><a className={s.link} href="src/components/Navbar/Navbar#">Music</a></li>
-                <li><a className={s.link} href="src/components/Navbar/Navbar#">Settings</a></li>
+                <li><a className={`${s.link} ${s.active}`} href="/Profile">Profile</a></li>
+                <li><a className={s.link} href="/Messages">Messages</a></li>
+                <li><a className={s.link} href="/News">News</a></li>
+                <li><a className={s.link} href="/Music">Music</a></li>
+                <li><a className={s.link} href="/Settings">Settings</a></li>
             </ul>
         </nav>
     )
