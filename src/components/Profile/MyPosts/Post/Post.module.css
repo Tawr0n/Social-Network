@@ -1,0 +1,12 @@
+/*===============Post====================*/
+.post {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.post__imgBlock img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid black;
+}
