@@ -1,0 +1,13 @@
+/*===============Navbar====================*/
+
+.nav {
+    grid-area: nav;
+    background-color: darkseagreen;
+}
+
+.link {
+    color: forestgreen;
+}
+.link.active {
+    color: black;
+}
