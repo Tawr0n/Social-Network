@@ -1,13 +1,20 @@
 /*===============Navbar====================*/
-
 .nav {
     grid-area: nav;
     background-color: darkseagreen;
 }
 
+.nav__links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 40px 20px;
+}
+
 .link {
     color: forestgreen;
 }
-.link.active {
+.link_active {
     color: black;
 }
