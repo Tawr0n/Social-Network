@@ -8,11 +8,9 @@ const MyPosts = () => {
             <textarea className={'posts__input'} placeholder={'Введіть текст...'} cols="20"
                       rows="3"/>
             <button className={'posts__button'}>Відправити</button>
-            <Post/>
-            <Post/>
-            <Post/>
-            <Post/>
-            <Post/>
+            <Post message={'Слизерин'} likesCount={41}/>
+            <Post message={'Рейвенклов'} likesCount={59}/>
+
         </div>
 
     )
