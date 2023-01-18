@@ -1,8 +1,7 @@
 /*===============Profile====================*/
 
 .main {
-    grid-area: main;
-    background-color: lightgrey;
+
 }
 .main__imgBlock img {
     width: 100%;
