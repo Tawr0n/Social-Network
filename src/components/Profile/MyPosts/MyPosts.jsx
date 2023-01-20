@@ -2,6 +2,10 @@ import s from './MyPosts.module.css'
 import Post from "./Post/Post";
 
 const MyPosts = () => {
+    const posts = [
+        {id: 1, message: 'Слизерин', likesCount: 41},
+        {id: 2, message: 'Рейвенклов', likesCount: 59},
+    ]
     return (
         <div className={`main__posts ${s.posts}`}>
             <h2 className={s.posts__title}>MyPosts</h2>
@@ -12,9 +16,7 @@ const MyPosts = () => {
             <div>
                 <button className={s.posts__button}>Відправити</button>
             </div>
-            <Post message={'Слизерин'} likesCount={41}/>
-            <Post message={'Рейвенклов'} likesCount={59}/>
-
+            {posts.map(p => <Post id={p.id} message={p.message} likesCount={p.likesCount}/>)}
         </div>
 
     )
