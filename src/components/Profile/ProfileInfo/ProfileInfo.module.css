@@ -1,0 +1,11 @@
+/*===============ProfileInfo====================*/
+
+.main__imgBlock img {
+    /*width: 100%;*/
+    max-width: 100%;
+}
+
+.main__profile {
+    padding: 10px;
+}
+

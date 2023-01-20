@@ -3,11 +3,15 @@ import Post from "./Post/Post";
 
 const MyPosts = () => {
     return (
-        <div className={'main__posts posts'}>
-            <h2 className={'posts__title'}>MyPosts</h2>
-            <textarea className={'posts__input'} placeholder={'Введіть текст...'} cols="20"
-                      rows="3"/>
-            <button className={'posts__button'}>Відправити</button>
+        <div className={`main__posts ${s.posts}`}>
+            <h2 className={s.posts__title}>MyPosts</h2>
+            <div>
+                 <textarea className={s.posts__input} placeholder={'Введіть текст...'} cols="20"
+                           rows="3"/>
+            </div>
+            <div>
+                <button className={s.posts__button}>Відправити</button>
+            </div>
             <Post message={'Слизерин'} likesCount={41}/>
             <Post message={'Рейвенклов'} likesCount={59}/>
 
