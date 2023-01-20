@@ -17,7 +17,9 @@ function App() {
                 <main className={'content'}>
                     <Routes>
                         <Route path={'/*'} element={<Profile/>}/>
-                        <Route path={'/messages'} element={<Messages/>}/>
+                        <Route path={'/messages'} element={<Messages/>}>
+                            <Route path={'/messages/*'} element={<Messages/>}/>
+                        </Route>
                         <Route path={'/news'} element={<News/>}/>
                         <Route path={'/music'} element={<Music/>}/>
                         <Route path={'/settings'} element={<Settings/>}/>
