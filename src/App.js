@@ -8,7 +8,7 @@ import News from "./components/News/News";
 import Music from "./components/Music/Music";
 import Settings from "./components/Settings/Settings";
 
-function App() {
+const App = ({posts, dialogs, messages}) => {
     return (
         <div className="wrapper">
             <div className="wrapper__container">
@@ -16,8 +16,8 @@ function App() {
                 <Navbar/>
                 <main className={'content'}>
                     <Routes>
-                        <Route path={'/*'} element={<Profile/>}/>
-                        <Route path={'/messages'} element={<Messages/>}>
+                        <Route path={'/*'} element={<Profile posts={posts}/>}/>
+                        <Route path={'/messages'} element={<Messages dialogs={dialogs} messages={messages}/>}>
                             <Route path={'/messages/*'} element={<Messages/>}/>
                         </Route>
                         <Route path={'/news'} element={<News/>}/>

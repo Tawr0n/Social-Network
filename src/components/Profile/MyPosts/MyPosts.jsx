@@ -1,11 +1,7 @@
 import s from './MyPosts.module.css'
 import Post from "./Post/Post";
 
-const MyPosts = () => {
-    const posts = [
-        {id: 1, message: 'Слизерин', likesCount: 41},
-        {id: 2, message: 'Рейвенклов', likesCount: 59},
-    ]
+const MyPosts = ({posts}) => {
     return (
         <div className={`main__posts ${s.posts}`}>
             <h2 className={s.posts__title}>MyPosts</h2>
