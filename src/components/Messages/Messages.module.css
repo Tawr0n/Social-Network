@@ -4,6 +4,7 @@
     grid-template-columns: 200px 1fr;
     padding: 10px;
     gap: 10px;
+    height: calc(100vh - 120px );
 }
 
 .dialogs {
@@ -77,7 +78,10 @@
     color: grey;
 }
 
-.messages {
+.chat {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     padding: 5px;
 }
 
@@ -89,3 +93,14 @@
     margin-bottom: 5px;
 }
 
+.chat__functional {
+    height: 50px;
+    display: grid;
+    grid-template-columns: 9fr 1fr;
+    gap: 10px;
+}
+.chat__input {
+    padding: 5px;
+}
+.chat__button {
+}
