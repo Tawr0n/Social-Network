@@ -8,7 +8,7 @@ import News from "./components/News/News";
 import Music from "./components/Music/Music";
 import Settings from "./components/Settings/Settings";
 
-const App = ({state}) => {
+const App = ({state, addPost}) => {
     return (
         <div className="wrapper">
             <div className="wrapper__container">
@@ -16,7 +16,7 @@ const App = ({state}) => {
                 <Sidebar sidebar={state.sidebar}/>
                 <main className={'content'}>
                     <Routes>
-                        <Route path={'/*'} element={<Profile profilePage={state.profilePage} />}/>
+                        <Route path={'/*'} element={<Profile profilePage={state.profilePage} addPost={addPost} />}/>
                         <Route path={'/messages'} element={<Messages messagesPage={state.messagesPage} />}>
                             <Route path={'/messages/*'} element={<Messages/>}/>
                         </Route>
