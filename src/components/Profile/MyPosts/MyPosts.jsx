@@ -1,16 +1,18 @@
 import s from './MyPosts.module.css'
 import Post from "./Post/Post";
 
-const MyPosts = () => {
+const MyPosts = ({posts}) => {
     return (
-        <div className={'main__posts posts'}>
-            <h2 className={'posts__title'}>MyPosts</h2>
-            <textarea className={'posts__input'} placeholder={'Введіть текст...'} cols="20"
-                      rows="3"/>
-            <button className={'posts__button'}>Відправити</button>
-            <Post message={'Слизерин'} likesCount={41}/>
-            <Post message={'Рейвенклов'} likesCount={59}/>
-
+        <div className={`main__posts ${s.posts}`}>
+            <h2 className={s.posts__title}>MyPosts</h2>
+            <div>
+                 <textarea className={s.posts__input} placeholder={'Введіть текст...'} cols="20"
+                           rows="3"/>
+            </div>
+            <div>
+                <button className={s.posts__button}>Відправити</button>
+            </div>
+            {posts.map(p => <Post id={p.id} message={p.message} likesCount={p.likesCount}/>)}
         </div>
 
     )
