@@ -1,19 +1,18 @@
 import React from "react";
 import s from './MyPosts.module.css'
 import Post from "./Post/Post";
+import {addPostAC, updateNewPostTextAC} from "../../../redux/state";
+
 
 const MyPosts = ({posts, newPostText, dispatch}) => {
 
     const textareaRef = React.createRef()
     const onAddPost = () => {
-        dispatch({type: 'ADD_POST'})
+        dispatch(addPostAC())
     }
     const onPostChange = () => {
         const text = textareaRef.current.value
-        dispatch({
-            type: 'UPDATE_NEW_POST_TEXT',
-            newText: text,
-        })
+        dispatch(updateNewPostTextAC(text))
     }
     return (
         <div className={`main__posts ${s.posts}`}>

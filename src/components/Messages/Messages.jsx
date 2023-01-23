@@ -2,22 +2,18 @@ import React from 'react';
 import s from './Messages.module.css'
 import Dialog from "./Dialog/Dialog";
 import Message from "./Message/Message";
+import {sendMessageAC, updateNewMessageTextAC} from "../../redux/state";
 
 
 const Messages = ({messagesPage, dispatch}) => {
 
     const textareaMessage = React.createRef()
     const onSendMessage = () => {
-        dispatch({
-            type: 'SEND_MESSAGE'
-        })
+        dispatch(sendMessageAC())
     }
     const onMessageChange = () => {
         const message = textareaMessage.current.value
-        dispatch({
-            type: 'UPDATE_NEW_MESSAGE_TEXT',
-            newMessage: message,
-        })
+        dispatch(updateNewMessageTextAC(message))
     }
 
     return (<section className={s.section}>
