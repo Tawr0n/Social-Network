@@ -17,7 +17,7 @@ const Messages = ({messagesPage, sendMessage, updateNewMessageText}) => {
 
     return (<section className={s.section}>
         <div className={s.dialogs}>
-            {messagesPage.dialogs.map(d => <Dialog id={d.id} name={d.name} text={d.text}/>)}
+            {messagesPage.dialogs.map(d => <Dialog id={d.id} name={d.name} text={d.text} image={d.image}/>)}
         </div>
         <div className={s.chat}>
             <div className={s.messages}>

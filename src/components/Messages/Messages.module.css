@@ -37,12 +37,12 @@
 }
 
 
-.avatar {
+.avatar img {
     grid-area: ava;
-    min-width: 40px;
-    min-height: 40px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background-color: white;
+    /*background-color: white;*/
 }
 
 .info {
@@ -58,7 +58,7 @@
     content: '';
     position: absolute;
     bottom: 0;
-    background-color: cornflowerblue;
+    background-color: darkseagreen; /*cornflowerblue*/
     height: 1px;
     width: 100%;
     text-align: center;
@@ -88,6 +88,7 @@
     flex-direction: column;
     justify-content: space-between;
     padding: 5px;
+    border-left: 3px solid firebrick;
 }
 
 .message {

@@ -1,4 +1,6 @@
-import {rerenderEntireTree} from "../render";
+let rerenderEntireTree = () => {
+    console.log('state was changed')
+}
 
 const state = {
     profilePage: {
@@ -10,9 +12,24 @@ const state = {
     },
     messagesPage: {
         dialogs: [
-            {id: 1, name: 'Албус', text: 'Прибуду о 20:00 у суботу'},
-            {id: 2, name: 'Северус', text: 'І не забудь.'},
-            {id: 3, name: 'Рон', text: 'Як життя, старий?'},
+            {
+                id: 1,
+                name: 'Албус',
+                text: 'Прибуду о 20:00 у суботу',
+                image: 'https://images.ctfassets.net/usf1vwtuqyxm/1dmmUJzpRcWaUmMOCu8QwO/7e013145694566076d47fd004fd604c2/AlbusDumbledore_WB_F6_DumbledoreSittingInChair_Promo_080615_Port.jpg',
+            },
+            {
+                id: 2,
+                name: 'Северус',
+                text: 'І не забудь.',
+                image: 'https://kartinkin.net/uploads/posts/2022-09/1662417459_1-kartinkin-net-p-severus-sneip-arti-vkontakte-1.jpg',
+            },
+            {
+                id: 3,
+                name: 'Рон',
+                text: 'Як життя, старий?',
+                image: 'https://upload.wikimedia.org/wikipedia/en/thumb/5/5e/Ron_Weasley_poster.jpg/220px-Ron_Weasley_poster.jpg',
+            },
         ],
         messages: [
             {id: 1, message: 'Експеліармус'},
@@ -49,13 +66,13 @@ export const addPost = () => {
             likesCount: 0
         })
         state.profilePage.newPostText = ''
-        rerenderEntireTree(state, addPost, updateNewPostText, sendMessage, updateNewMessageText)
+        rerenderEntireTree()
     }
 
 }
 export const updateNewPostText = (newText) => {
     state.profilePage.newPostText = newText
-    rerenderEntireTree(state, addPost, updateNewPostText, sendMessage, updateNewMessageText)
+    rerenderEntireTree()
 }
 
 export const sendMessage = () => {
@@ -65,12 +82,16 @@ export const sendMessage = () => {
             message: state.messagesPage.newMessageText,
         })
         state.messagesPage.newMessageText = ''
-        rerenderEntireTree(state, addPost, updateNewPostText, sendMessage, updateNewMessageText)
+        rerenderEntireTree()
     }
 }
 export const updateNewMessageText = (newText) => {
     state.messagesPage.newMessageText = newText
-    rerenderEntireTree(state, addPost, updateNewPostText, sendMessage, updateNewMessageText)
+    rerenderEntireTree()
+}
+
+export const subscribe = (observer) => {
+    rerenderEntireTree = observer
 }
 
 export default state
