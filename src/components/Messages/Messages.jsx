@@ -4,15 +4,20 @@ import Dialog from "./Dialog/Dialog";
 import Message from "./Message/Message";
 
 
-const Messages = ({messagesPage, sendMessage, updateNewMessageText}) => {
+const Messages = ({messagesPage, dispatch}) => {
 
     const textareaMessage = React.createRef()
     const onSendMessage = () => {
-        sendMessage()
+        dispatch({
+            type: 'SEND_MESSAGE'
+        })
     }
     const onMessageChange = () => {
         const message = textareaMessage.current.value
-        updateNewMessageText(message)
+        dispatch({
+            type: 'UPDATE_NEW_MESSAGE_TEXT',
+            newMessage: message,
+        })
     }
 
     return (<section className={s.section}>

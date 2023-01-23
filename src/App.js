@@ -17,12 +17,10 @@ const App = ({store}) => {
                 <main className={'content'}>
                     <Routes>
                         <Route path={'/*'} element={<Profile profilePage={store.getState().profilePage}
-                                                             addPost={store.addPost.bind(store)}
-                                                             updateNewPostText={store.updateNewPostText.bind(store)}/>}/>
+                                                             dispatch={store.dispatch.bind(store)}/>}/>
                         <Route path={'/messages'}
                                element={<Messages messagesPage={store.getState().messagesPage}
-                                                  sendMessage={store.sendMessage.bind(store)}
-                                                  updateNewMessageText={store.updateNewMessageText.bind(store)}/>}>
+                                                  dispatch={store.dispatch.bind(store)}/>}>
                             <Route path={'/messages/*'} element={<Messages/>}/>
                         </Route>
                         <Route path={'/news'} element={<News/>}/>

@@ -2,15 +2,18 @@ import React from "react";
 import s from './MyPosts.module.css'
 import Post from "./Post/Post";
 
-const MyPosts = ({posts, newPostText, addPost, updateNewPostText}) => {
+const MyPosts = ({posts, newPostText, dispatch}) => {
 
     const textareaRef = React.createRef()
     const onAddPost = () => {
-        addPost()
+        dispatch({type: 'ADD_POST'})
     }
     const onPostChange = () => {
         const text = textareaRef.current.value
-        updateNewPostText(text)
+        dispatch({
+            type: 'UPDATE_NEW_POST_TEXT',
+            newText: text,
+        })
     }
     return (
         <div className={`main__posts ${s.posts}`}>

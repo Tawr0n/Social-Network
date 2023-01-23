@@ -54,44 +54,56 @@ let store = {
             ]
         }
     },
+    _callSubscriber() {
+        console.log('no changes')
+    },
+
     getState() {
         return this._state
-    },
-    addPost() {
-        if (this._state.profilePage.newPostText.length !== 0) {
-            this._state.profilePage.posts.push({
-                id: this._state.profilePage.posts.length + 1,
-                message: this._state.profilePage.newPostText,
-                likesCount: 0
-            })
-            this._state.profilePage.newPostText = ''
-            this._callSubscriber()
-        }
-    },
-    updateNewPostText(newText) {
-        this._state.profilePage.newPostText = newText
-        this._callSubscriber()
-    },
-    sendMessage() {
-        if (this._state.messagesPage.newMessageText.length !== 0) {
-            this._state.messagesPage.messages.push({
-                id: this._state.messagesPage.messages.length + 1,
-                message: this._state.messagesPage.newMessageText,
-            })
-            this._state.messagesPage.newMessageText = ''
-            this._callSubscriber()
-        }
-    },
-    updateNewMessageText(newText) {
-        this._state.messagesPage.newMessageText = newText
-        this._callSubscriber()
     },
     subscribe(observer) {
         this._callSubscriber = observer
     },
-    _callSubscriber() {
-        console.log('no changes')
-    },
+
+    dispatch(action) {
+        switch (action.type) {
+            case 'ADD_POST': {
+                if (this._state.profilePage.newPostText.length !== 0) {
+                    this._state.profilePage.posts.push({
+                        id: this._state.profilePage.posts.length + 1,
+                        message: this._state.profilePage.newPostText,
+                        likesCount: 0
+                    })
+                    this._state.profilePage.newPostText = ''
+                    this._callSubscriber()
+                }
+                break
+            }
+            case 'UPDATE_NEW_POST_TEXT': {
+                this._state.profilePage.newPostText = action.newText
+                this._callSubscriber()
+                break
+            }
+            case 'SEND_MESSAGE': {
+                if (this._state.messagesPage.newMessageText.length !== 0) {
+                    this._state.messagesPage.messages.push({
+                        id: this._state.messagesPage.messages.length + 1,
+                        message: this._state.messagesPage.newMessageText,
+                    })
+                    this._state.messagesPage.newMessageText = ''
+                    this._callSubscriber()
+                }
+                break
+            }
+            case 'UPDATE_NEW_MESSAGE_TEXT': {
+                this._state.messagesPage.newMessageText = action.newMessage
+                this._callSubscriber()
+                break
+            }
+            default:
+                break
+        }
+    }
 }
 
 export default store
