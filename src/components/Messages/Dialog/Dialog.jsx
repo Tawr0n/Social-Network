@@ -5,7 +5,6 @@ import {NavLink} from "react-router-dom";
 const isActive = ({isActive}) => isActive ? s.dialog_active : s.dialog
 
 const Dialog = (props) => {
-    debugger
     return (
         <NavLink className={isActive} to={`/messages/${props.id}`}>
             <div className={s.avatar}>

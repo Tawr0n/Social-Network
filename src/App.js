@@ -8,19 +8,21 @@ import News from "./components/News/News";
 import Music from "./components/Music/Music";
 import Settings from "./components/Settings/Settings";
 
-const App = ({state, addPost, sendMessage, updateNewPostText, updateNewMessageText}) => {
+const App = ({store}) => {
     return (
         <div className="wrapper">
             <div className="wrapper__container">
                 <Header/>
-                <Sidebar sidebar={state.sidebar}/>
+                <Sidebar sidebar={store.getState().sidebar}/>
                 <main className={'content'}>
                     <Routes>
-                        <Route path={'/*'} element={<Profile profilePage={state.profilePage} addPost={addPost}
-                                                             updateNewPostText={updateNewPostText}/>}/>
+                        <Route path={'/*'} element={<Profile profilePage={store.getState().profilePage}
+                                                             addPost={store.addPost.bind(store)}
+                                                             updateNewPostText={store.updateNewPostText.bind(store)}/>}/>
                         <Route path={'/messages'}
-                               element={<Messages messagesPage={state.messagesPage} sendMessage={sendMessage}
-                                                  updateNewMessageText={updateNewMessageText}/>}>
+                               element={<Messages messagesPage={store.getState().messagesPage}
+                                                  sendMessage={store.sendMessage.bind(store)}
+                                                  updateNewMessageText={store.updateNewMessageText.bind(store)}/>}>
                             <Route path={'/messages/*'} element={<Messages/>}/>
                         </Route>
                         <Route path={'/news'} element={<News/>}/>
