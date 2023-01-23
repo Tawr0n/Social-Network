@@ -6,6 +6,7 @@ const state = {
             {id: 1, message: 'Слизерин', likesCount: 41},
             {id: 2, message: 'Рейвенклов', likesCount: 59},
         ],
+        newPostText: 'Ua',
     },
     messagesPage: {
         dialogs: [
@@ -17,6 +18,7 @@ const state = {
             {id: 1, message: 'Експеліармус'},
             {id: 2, message: 'Акціо'},
         ],
+        newMessageText: '',
     },
     sidebar: {
         friends: [
@@ -39,14 +41,38 @@ const state = {
     }
 }
 
-export const addPost = message => {
-    state.profilePage.posts.push({
-        id: state.profilePage.posts.length + 1,
-        message: message,
-        likesCount: 0
-    })
-    rerenderEntireTree(state, addPost)
+export const addPost = () => {
+    if (state.profilePage.newPostText.length !== 0) {
+        state.profilePage.posts.push({
+            id: state.profilePage.posts.length + 1,
+            message: state.profilePage.newPostText,
+            likesCount: 0
+        })
+        state.profilePage.newPostText = ''
+        rerenderEntireTree(state, addPost, updateNewPostText, sendMessage, updateNewMessageText)
+    }
+
+}
+export const updateNewPostText = (newText) => {
+    state.profilePage.newPostText = newText
+    rerenderEntireTree(state, addPost, updateNewPostText, sendMessage, updateNewMessageText)
 }
 
+export const sendMessage = () => {
+    if (state.messagesPage.newMessageText.length !== 0) {
+        state.messagesPage.messages.push({
+            id: state.messagesPage.messages.length + 1,
+            message: state.messagesPage.newMessageText,
+        })
+        state.messagesPage.newMessageText = ''
+        rerenderEntireTree(state, addPost, updateNewPostText, sendMessage, updateNewMessageText)
+    }
+}
+export const updateNewMessageText = (newText) => {
+    state.messagesPage.newMessageText = newText
+    rerenderEntireTree(state, addPost, updateNewPostText, sendMessage, updateNewMessageText)
+}
 
 export default state
+
+window.state = state

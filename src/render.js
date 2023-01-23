@@ -6,11 +6,12 @@ import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-export const rerenderEntireTree = (state, addPost) => {
+export const rerenderEntireTree = (state, addPost, updateNewPostText, sendMessage, updateNewMessageText) => {
     root.render(
         <React.StrictMode>
             <BrowserRouter>
-                <App state={state} addPost={addPost}/>
+                <App state={state} addPost={addPost} updateNewPostText={updateNewPostText}
+                     sendMessage={sendMessage} updateNewMessageText={updateNewMessageText}/>
             </BrowserRouter>
         </React.StrictMode>
     );

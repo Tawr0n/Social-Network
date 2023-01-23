@@ -2,10 +2,11 @@ import React from 'react';
 import s from '../Messages.module.css'
 import {NavLink} from "react-router-dom";
 
+const isActive = ({isActive}) => isActive ? s.dialog_active : s.dialog
 
 const Dialog = (props) => {
-    return (<NavLink to={`/messages/${props.id}`}>
-        <div className={s.dialog}>
+    return (
+        <NavLink className={isActive} to={`/messages/${props.id}`}>
             <div className={s.avatar}>
                 <img src="" alt=""/>
             </div>
@@ -13,8 +14,7 @@ const Dialog = (props) => {
                 <h3 className={s.name}>{props.name}</h3>
                 <div className={s.text}>{props.text}</div>
             </div>
-        </div>
-    </NavLink>);
+        </NavLink>);
 };
 
 export default Dialog;
