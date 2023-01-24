@@ -8,18 +8,18 @@ import News from "./components/News/News";
 import Music from "./components/Music/Music";
 import Settings from "./components/Settings/Settings";
 
-const App = ({store}) => {
+const App = ({store, state}) => {
     return (
         <div className="wrapper">
             <div className="wrapper__container">
                 <Header/>
-                <Sidebar sidebar={store.getState().sidebar}/>
+                <Sidebar sidebar={state.sidebar}/>
                 <main className={'content'}>
                     <Routes>
-                        <Route path={'/*'} element={<Profile profilePage={store.getState().profilePage}
+                        <Route path={'/*'} element={<Profile profilePage={state.profilePage}
                                                              dispatch={store.dispatch.bind(store)}/>}/>
                         <Route path={'/messages'}
-                               element={<Messages messagesPage={store.getState().messagesPage}
+                               element={<Messages messagesPage={state.messagesPage}
                                                   dispatch={store.dispatch.bind(store)}/>}>
                             <Route path={'/messages/*'} element={<Messages/>}/>
                         </Route>
