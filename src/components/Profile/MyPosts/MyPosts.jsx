@@ -1,24 +1,23 @@
 import React from "react";
 import s from './MyPosts.module.css'
 import Post from "./Post/Post";
-import {addPostAC, updateNewPostTextAC} from "../../../redux/state";
+import {addPostAC, updateNewPostTextAC} from "../../../redux/profileReducer";
 
 
 const MyPosts = ({posts, newPostText, dispatch}) => {
 
-    const textareaRef = React.createRef()
     const onAddPost = () => {
         dispatch(addPostAC())
     }
-    const onPostChange = () => {
-        const text = textareaRef.current.value
+    const onPostChange = (e) => {
+        const text = e.target.value
         dispatch(updateNewPostTextAC(text))
     }
     return (
         <div className={`main__posts ${s.posts}`}>
             <h2 className={s.posts__title}>MyPosts</h2>
             <div>
-                 <textarea onChange={onPostChange} value={newPostText} ref={textareaRef}
+                 <textarea onChange={onPostChange} value={newPostText}
                            className={s.posts__input}
                            placeholder={'Введіть текст...'}
                            cols="20"
