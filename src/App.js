@@ -8,7 +8,7 @@ import Music from "./components/Music/Music";
 import Settings from "./components/Settings/Settings";
 import MessagesContainer from "./components/Messages/MessagesContainer";
 
-const App = ({store, state}) => {
+const App = ({state}) => {
     return (
         <div className="wrapper">
             <div className="wrapper__container">
@@ -16,9 +16,8 @@ const App = ({store, state}) => {
                 <Sidebar sidebar={state.sidebar}/>
                 <main className={'content'}>
                     <Routes>
-                        <Route path={'/*'} element={<Profile store={store}/>}/>
-                        <Route path={'/messages'}
-                               element={<MessagesContainer store={store}/>}>
+                        <Route path={'/*'} element={<Profile/>}/>
+                        <Route path={'/messages'} element={<MessagesContainer/>}>
                             <Route path={'/messages/*'} element={<MessagesContainer/>}/>
                         </Route>
                         <Route path={'/news'} element={<News/>}/>
