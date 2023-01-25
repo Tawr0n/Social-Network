@@ -1,17 +1,16 @@
 import React from "react";
 import s from './MyPosts.module.css'
 import Post from "./Post/Post";
-import {addPostAC, updateNewPostTextAC} from "../../../redux/profileReducer";
 
 
-const MyPosts = ({posts, newPostText, dispatch}) => {
+const MyPosts = ({posts, newPostText, addPost, updateNewPostText}) => {
 
     const onAddPost = () => {
-        dispatch(addPostAC())
+        addPost()
     }
     const onPostChange = (e) => {
         const text = e.target.value
-        dispatch(updateNewPostTextAC(text))
+        updateNewPostText(text)
     }
     return (
         <div className={`main__posts ${s.posts}`}>
