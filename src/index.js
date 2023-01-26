@@ -9,22 +9,15 @@ import {Provider} from "react-redux";
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-export const rerenderEntireTree = (state) => {
-    root.render(
-        <React.StrictMode>
-            <BrowserRouter>
-                <Provider store={store}>
-                    <App state={state}/>
-                </Provider>
-            </BrowserRouter>
-        </React.StrictMode>
-    );
-}
-rerenderEntireTree(store.getState())
-store.subscribe(() => rerenderEntireTree(store.getState()))
-// Redux не запипує при виклику функції rerenderEntireTree вхідний параметр state,
-// тому ми передаємо анонімну функцію, а в середині неї вже rerenderEntireTree зі стейтом
-// (а могли передати функцію як callback)
+root.render(
+    <React.StrictMode>
+        <BrowserRouter>
+            <Provider store={store}>
+                <App state={store.getState()}/>
+            </Provider>
+        </BrowserRouter>
+    </React.StrictMode>
+);
 
 
 // If you want to start measuring performance in your app, pass a function

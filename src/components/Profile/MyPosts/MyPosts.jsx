@@ -25,7 +25,7 @@ const MyPosts = ({posts, newPostText, addPost, updateNewPostText}) => {
             <div>
                 <button onClick={onAddPost} className={s.posts__button}>Відправити</button>
             </div>
-            {posts.map(p => <Post id={p.id} message={p.message} likesCount={p.likesCount}/>)}
+            {posts.map(p => <Post id={p.id} message={p.message} likesCount={p.likesCount} key={p.id}/>)}
         </div>
 
     )
