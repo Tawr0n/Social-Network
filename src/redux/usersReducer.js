@@ -2,7 +2,22 @@ const FOLLOW_TOGGLE = 'FOLLOW_TOGGLE'
 const SET_USERS = 'SET_STATE'
 
 const initialState = {
-    users: [ ]
+    users: [/*{
+        id: 1,
+        fullName: 'Kit Yaroslav',
+        image: 'https://i.pinimg.com/736x/c5/83/0d/c5830de74df706029f95b41d36f420a2.jpg',
+        isFollowed: true,
+        status: 'I`m a ukrainian',
+        location: {country: 'Ukraine', city: 'Lviv'}
+    },
+        {
+            id: 2,
+            fullName: 'Pennings Daniel',
+            image: 'https://i.pinimg.com/736x/c5/83/0d/c5830de74df706029f95b41d36f420a2.jpg',
+            isFollowed: false,
+            status: 'Летючий голандець',
+            location: {country: 'Ukraine', city: 'Lviv'}
+        },*/]
 }
 
 const usersReducer = (state = initialState, action) => {
