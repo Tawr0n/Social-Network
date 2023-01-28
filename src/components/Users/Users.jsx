@@ -4,17 +4,21 @@ import User from "./User/User";
 import axios from "axios";
 
 const Users = ({users, followToggle, setUsers}) => {
-    if (users.length === 0) {
-        axios.get('https://social-network.samuraijs.com/api/1.0/users').then(response => {
-            setUsers(response.data.items)
-        })
+    const getUsers = () => {
+        if (users.length === 0) {
+            axios.get('https://social-network.samuraijs.com/api/1.0/users').then(response => {
+                setUsers(response.data.items)
+            })
 
+        }
     }
 
     return (
         <section className={s.users}>
             {
-                users.map(u => <User key={u.id} followToggle={followToggle} {...u} />)
+                users.length
+                    ? users.map(u => <User key={u.id} followToggle={followToggle} {...u} />)
+                    : <button onClick={getUsers}>Get users</button>
             }
         </section>
     );
