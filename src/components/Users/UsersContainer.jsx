@@ -1,11 +1,11 @@
 import {connect} from "react-redux";
 import Users from "./Users";
 import {
-    followToggleAC,
-    loadingToggleAC,
-    setActivePageAC,
-    setTotalUsersCountAC,
-    setUsersAC
+    followToggle,
+    loadingToggle,
+    setActivePage,
+    setTotalUsersCount,
+    setUsers
 } from "../../redux/usersReducer";
 import React from "react";
 import axios from "axios";
@@ -51,7 +51,7 @@ const mapStateToProps = (state) => ({
     activePage: state.usersPage.activePage,
     isLoading: state.usersPage.isLoading,
 })
-const mapDispatchToProps = (dispatch) => ({
+/*const mapDispatchToProps = (dispatch) => ({
     followToggle: (userId) => {
         dispatch(followToggleAC(userId))
     },
@@ -67,5 +67,11 @@ const mapDispatchToProps = (dispatch) => ({
     loadingToggle: isLoading => {
         dispatch(loadingToggleAC(isLoading))
     }
-})
-export default connect(mapStateToProps, mapDispatchToProps)(UsersContainer)
+})*/
+export default connect(mapStateToProps, {
+    followToggle,
+    setUsers,
+    setActivePage,
+    setTotalUsersCount,
+    loadingToggle
+})(UsersContainer)
