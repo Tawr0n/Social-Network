@@ -1,7 +1,7 @@
 import React from 'react';
 import s from './Users.module.css'
 import User from "./User/User";
-
+import Preloader from "../UI/Preloader/Preloader";
 
 
 const Users = (props) => {
@@ -21,19 +21,23 @@ const Users = (props) => {
     } else {
         slicedPages = pages.slice(activePage - 3, activePage + 2)
     }
+
     return (
         <section className={s.users}>
             <div className={s.pagination}>
                 {
-                    slicedPages.map(p => <span onClick={(e) => props.onPageClick(p)}
+                    slicedPages.map(p => <span onClick={() => props.onPageClick(p)}
                                                className={props.activePage === p
                                                    ? `${s.pageNumber_selected} ${s.pageNumber}`
                                                    : s.pageNumber} key={p}>{p}</span>)
                 }
             </div>
-            {
-                props.users.map(u => <User key={u.id}
-                                                followToggle={props.followToggle} {...u} />)
+
+            {props.isLoading
+                ? <Preloader/>
+                : props.users.map(u => <User key={u.id}
+                                             followToggle={props.followToggle} {...u} />)
+
             }
         </section>
     )

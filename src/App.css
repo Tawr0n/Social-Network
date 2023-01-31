@@ -26,6 +26,7 @@
 .content {
     grid-area: main;
     background-color: lightgrey;
+    position: relative;
 }
 
 
