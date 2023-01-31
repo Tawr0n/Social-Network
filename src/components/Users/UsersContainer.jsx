@@ -1,6 +1,37 @@
 import {connect} from "react-redux";
 import Users from "./Users";
 import {followToggleAC, setActivePageAC, setTotalUsersCountAC, setUsersAC} from "../../redux/usersReducer";
+import React from "react";
+import axios from "axios";
+
+
+class UsersContainer extends React.Component {
+
+    componentDidMount() {
+        if (this.props.users.length === 0) {
+            axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.activePage}&count=${this.props.pageSize}`)
+                .then(response => {
+                    this.props.setUsers(response.data.items)
+                    this.props.setTotalUsersCount(response.data.totalCount)
+                })
+        }
+    }
+
+    onPageClick = (pageNumber) => {
+        this.props.setActivePage(pageNumber)
+        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${this.props.pageSize}`)
+            .then(response => {
+                this.props.setUsers(response.data.items)
+            })
+    }
+
+    render() {
+        return <Users users={this.props.users} activePage={this.props.activePage}
+                      totalUsersCount={this.props.totalUsersCount} pageSize={this.props.pageSize}
+                      followToggle={this.props.followToggle} onPageClick={this.onPageClick}/>
+    }
+}
+
 
 const mapStateToProps = (state) => ({
     users: state.usersPage.users,
@@ -22,5 +53,4 @@ const mapDispatchToProps = (dispatch) => ({
         dispatch(setTotalUsersCountAC(totalUsersCount))
     }
 })
-const UsersContainer = connect(mapStateToProps, mapDispatchToProps)(Users)
-export default UsersContainer
+export default connect(mapStateToProps, mapDispatchToProps)(UsersContainer)

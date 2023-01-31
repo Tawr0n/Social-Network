@@ -37,3 +37,6 @@
 .pageNumber_selected {
     font-weight: 800;
 }
+.pagination {
+    user-select: none;
+}
