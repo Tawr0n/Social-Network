@@ -1,6 +1,6 @@
 import s from './ProfileInfo.module.css'
 
-const ProfileInfo = () => {
+const ProfileInfo = ({profile}) => {
     return (
         <div>
             <div className={s.main__imgBlock}>
@@ -9,15 +9,15 @@ const ProfileInfo = () => {
                     alt=""/>
             </div>
             <div className={s.main__profile}>
-                <div className={'main__avatar'}>
-                    <img src="src/components/Profile/Profile" alt=""/>
+                <div className={s.main__avatar}>
+                    <img src={profile.photos.large} alt="userImage"/>
                 </div>
-                <div className={'main__info'}>
-                    <p>Yaroslav Kit</p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
+                <div className={s.main__info}>
+                    <p>{`id: ${profile.userId}`}</p>
+                    <p>{profile.fullName}</p>
+                    <p>{profile.aboutMe}</p>
+                    <p>{profile.lookingForAJobDescription}</p>
+                    <p>{profile.contacts.instagram}</p>
                 </div>
             </div>
         </div>

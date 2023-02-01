@@ -1,13 +1,16 @@
 import React from 'react';
 import s from '../Users.module.css'
 import userBaseImage from '../../../images/userBaseImage.jpg'
+import {Link} from "react-router-dom";
 
 const User = (props) => {
     return (
         <div className={s.user}>
             <div className={s.profile}>
                 <div className={s.avatarBlock}>
-                    <img src={props.photos.small ? props.photos.small : userBaseImage} alt="userImage"/>
+                    <Link to={`/profile/${props.id}`}>
+                        <img src={props.photos.small ? props.photos.small : userBaseImage} alt="userImage"/>
+                    </Link>
                 </div>
                 <div>
                     <button onClick={() => props.followToggle(props.id)}>

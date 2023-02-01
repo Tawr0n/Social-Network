@@ -1,11 +1,15 @@
 import s from './Profile.module.css'
 import ProfileInfo from "./ProfileInfo/ProfileInfo";
 import MyPostsContainer from "./MyPosts/MyPostsContainer";
+import Preloader from "../UI/Preloader/Preloader";
 
-const Profile = () => {
+const Profile = ({profile}) => {
+    if (!profile) {
+        return <Preloader />
+    }
     return (
         <div className={s.main}>
-            <ProfileInfo/>
+            <ProfileInfo profile={profile} />
             <MyPostsContainer/>
         </div>
     )
