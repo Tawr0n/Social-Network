@@ -2,8 +2,33 @@ import React from 'react';
 import s from '../Users.module.css'
 import userBaseImage from '../../../images/userBaseImage.jpg'
 import {Link} from "react-router-dom";
+import axios from "axios";
 
 const User = (props) => {
+    const onFollowClick = () => {
+        axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${props.id}`, {}, {
+            withCredentials: true,
+            headers: {
+                'API-KEY': 'cd906c48-adc3-4a11-a812-33f5901c1670'
+            }
+        }).then(response => {
+            if (response.data.resultCode === 0) {
+                props.followToggle(props.id)
+            }
+        })
+    }
+    const onUnfollowClick = () => {
+        axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${props.id}`, {
+            withCredentials: true,
+            headers: {
+                'API-KEY': 'cd906c48-adc3-4a11-a812-33f5901c1670'
+            }
+        }).then(response => {
+            if (response.data.resultCode === 0) {
+                props.followToggle(props.id)
+            }
+        })
+    }
     return (
         <div className={s.user}>
             <div className={s.profile}>
@@ -13,8 +38,8 @@ const User = (props) => {
                     </Link>
                 </div>
                 <div>
-                    <button onClick={() => props.followToggle(props.id)}>
-                        {props.isFollowed ? 'Unfollow' : 'Follow'}
+                    <button onClick={props.followed ? onUnfollowClick : onFollowClick}>
+                        {props.followed ? 'Unfollow' : 'Follow'}
                     </button>
                 </div>
             </div>
