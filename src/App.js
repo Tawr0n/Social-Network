@@ -1,5 +1,4 @@
 import './App.css';
-import Header from "./components/Header/Header";
 import Sidebar from "./components/Sidebar/Sidebar";
 import {Route, Routes} from "react-router-dom";
 import News from "./components/News/News";
@@ -8,12 +7,13 @@ import Settings from "./components/Settings/Settings";
 import MessagesContainer from "./components/Messages/MessagesContainer";
 import UsersContainer from "./components/Users/UsersContainer";
 import ProfileContainer from "./components/Profile/ProfileContainer";
+import HeaderContainer from "./components/Header/HeaderContainer";
 
 const App = ({state}) => {
     return (
         <div className="wrapper">
             <div className="wrapper__container">
-                <Header/>
+                <HeaderContainer/>
                 <Sidebar sidebar={state.sidebar}/>
                 <main className={'content'}>
                     <Routes>

@@ -4,6 +4,7 @@
     background-color: firebrick;
 
     display: flex;
+    justify-content: space-between;
     align-items: center;
     padding: 0 10px;
 
@@ -16,4 +17,7 @@
 .header__logo img {
     width: 80px;
     border-radius: 20px;
+}
+.header__login > * {
+    color: aliceblue;
 }
