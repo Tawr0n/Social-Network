@@ -8,7 +8,7 @@ import {
     setUsers
 } from "../../redux/usersReducer";
 import React from "react";
-import axios from "axios";
+import {usersAPI} from "../../api/api";
 
 
 class UsersContainer extends React.Component {
@@ -16,12 +16,11 @@ class UsersContainer extends React.Component {
     componentDidMount() {
         if (this.props.users.length === 0) {
             this.props.loadingToggle(true)
-            axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.activePage}&count=${this.props.pageSize}`, {
-                withCredentials: true
-            })
-                .then(response => {
-                    this.props.setUsers(response.data.items)
-                    this.props.setTotalUsersCount(response.data.totalCount)
+
+            usersAPI.getUsers(this.props.activePage, this.props.pageSize)
+                .then(data => {
+                    this.props.setUsers(data.items)
+                    this.props.setTotalUsersCount(data.totalCount)
                     this.props.loadingToggle(false)
                 })
         }
@@ -30,11 +29,10 @@ class UsersContainer extends React.Component {
     onPageClick = (pageNumber) => {
         this.props.setActivePage(pageNumber)
         this.props.loadingToggle(true)
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${this.props.pageSize}`, {
-            withCredentials: true
-        })
-            .then(response => {
-                this.props.setUsers(response.data.items)
+
+        usersAPI.getUsers(pageNumber, this.props.pageSize)
+            .then(data => {
+                this.props.setUsers(data.items)
                 this.props.loadingToggle(false)
             })
     }
