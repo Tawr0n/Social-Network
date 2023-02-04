@@ -1,6 +1,7 @@
 import {connect} from "react-redux";
 import Users from "./Users";
 import {
+    followingInProgressToggle,
     followToggle,
     loadingToggle,
     setActivePage,
@@ -40,8 +41,9 @@ class UsersContainer extends React.Component {
     render() {
         return <Users users={this.props.users} activePage={this.props.activePage}
                       totalUsersCount={this.props.totalUsersCount} pageSize={this.props.pageSize}
-                      isLoading={this.props.isLoading}
-                      followToggle={this.props.followToggle} onPageClick={this.onPageClick}/>
+                      isLoading={this.props.isLoading} followingInProgress={this.props.followingInProgress}
+                      followToggle={this.props.followToggle} onPageClick={this.onPageClick}
+                      followingInProgressToggle={this.props.followingInProgressToggle}/>
     }
 }
 
@@ -52,6 +54,7 @@ const mapStateToProps = (state) => ({
     totalUsersCount: state.usersPage.totalUsersCount,
     activePage: state.usersPage.activePage,
     isLoading: state.usersPage.isLoading,
+    followingInProgress: state.usersPage.followingInProgress,
 })
 /*const mapDispatchToProps = (dispatch) => ({
     followToggle: (userId) => {
@@ -75,5 +78,6 @@ export default connect(mapStateToProps, {
     setUsers,
     setActivePage,
     setTotalUsersCount,
-    loadingToggle
+    loadingToggle,
+    followingInProgressToggle
 })(UsersContainer)

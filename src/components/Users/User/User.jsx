@@ -6,19 +6,23 @@ import {followAPI} from "../../../api/api";
 
 const User = (props) => {
     const onFollowClick = () => {
+        props.followingInProgressToggle(true, props.id)
         followAPI.follow(props.id)
             .then(data => {
                 if (data.resultCode === 0) {
                     props.followToggle(props.id)
                 }
+                props.followingInProgressToggle(false, props.id)
             })
     }
     const onUnfollowClick = () => {
+        props.followingInProgressToggle(true, props.id)
         followAPI.unfollow(props.id)
             .then(data => {
                 if (data.resultCode === 0) {
                     props.followToggle(props.id)
                 }
+                props.followingInProgressToggle(false, props.id)
             })
     }
     return (
@@ -30,7 +34,8 @@ const User = (props) => {
                     </Link>
                 </div>
                 <div>
-                    <button onClick={props.followed ? onUnfollowClick : onFollowClick}>
+                    <button disabled={props.followingInProgress.some(id => id === props.id)}
+                            onClick={props.followed ? onUnfollowClick : onFollowClick}>
                         {props.followed ? 'Unfollow' : 'Follow'}
                     </button>
                 </div>
