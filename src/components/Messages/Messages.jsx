@@ -2,10 +2,9 @@ import React from 'react';
 import s from './Messages.module.css'
 import Dialog from "./Dialog/Dialog";
 import Message from "./Message/Message";
-import {Navigate} from "react-router-dom";
 
 
-const Messages = ({messages, dialogs, newMessageText, sendMessage, updateNewMessageText, isAuth}) => {
+const Messages = ({messages, dialogs, newMessageText, sendMessage, updateNewMessageText}) => {
 
     const onSendMessage = () => {
         sendMessage()
@@ -14,8 +13,6 @@ const Messages = ({messages, dialogs, newMessageText, sendMessage, updateNewMess
         const message = e.target.value
         updateNewMessageText(message)
     }
-    console.log(isAuth)
-    if (!isAuth) return <Navigate to='/login'/>
 
     return (
         <section className={s.section}>
