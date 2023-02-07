@@ -10,7 +10,7 @@ class ProfileContainer extends React.Component {
     }
 
     render() {
-        return <Profile profile={this.props.profile}/>
+        return <Profile profile={this.props.profile} isAuth={this.props.isAuth}/>
     }
 }
 
@@ -31,6 +31,7 @@ function withRouter(Component) {
 }
 
 const mapStateToProps = state => ({
-    profile: state.profilePage.profile
+    profile: state.profilePage.profile,
+    isAuth: state.auth.isAuth
 })
 export default connect(mapStateToProps, {getUserProfileData})(withRouter(ProfileContainer))

@@ -6,6 +6,7 @@ const mapStateToProps = (state) => ({
     messages: state.messagesPage.messages,
     dialogs: state.messagesPage.dialogs,
     newMessageText: state.messagesPage.newMessageText,
+    isAuth: state.auth.isAuth
 })
 /*const mapDispatchToProps = (dispatch) => ({
     sendMessage: () => {
@@ -16,7 +17,7 @@ const mapStateToProps = (state) => ({
     }
 })*/
 
-const MessagesContainer = connect(mapStateToProps, {sendMessage,updateNewMessageText})(Messages)
+const MessagesContainer = connect(mapStateToProps, {sendMessage, updateNewMessageText})(Messages)
 
 
 export default MessagesContainer;
