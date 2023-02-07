@@ -1,3 +1,5 @@
+import {followAPI, usersAPI} from "../api/api";
+
 const FOLLOW_TOGGLE = 'FOLLOW_TOGGLE'
 const SET_USERS = 'SET_STATE'
 const SET_ACTIVE_PAGE = 'SET_ACTIVE_PAGE'
@@ -101,5 +103,55 @@ export const followingInProgressToggle = (isFollowingInProgress, userId) => ({
     type: FOLLOWING_IN_PROGRESS_TOGGLE,
     isFollowingInProgress, userId
 })
+export const getUsers = (activePage = 1, pageSize = 5, users) => {
+    return dispatch => {
+        if (users.length === 0) {
+            dispatch(loadingToggle(true))
 
+            usersAPI.getUsers(activePage, pageSize)
+                .then(data => {
+                    dispatch(setUsers(data.items))
+                    dispatch(setTotalUsersCount(data.totalCount))
+                    dispatch(loadingToggle(false))
+                })
+        }
+    }
+}
+export const getUsersOnClick = (pageNumber = 1, pageSize = 5) => {
+    return (dispatch) => {
+        dispatch(setActivePage(pageNumber))
+        dispatch(loadingToggle(true))
+
+        usersAPI.getUsers(pageNumber, pageSize)
+            .then(data => {
+                dispatch(setUsers(data.items))
+                dispatch(loadingToggle(false))
+            })
+    }
+}
+export const follow = (userId) => {
+    return (dispatch) => {
+        dispatch(followingInProgressToggle(true, userId))
+        followAPI.follow(userId)
+            .then(data => {
+                if (data.resultCode === 0) {
+                    dispatch(followToggle(userId))
+                }
+                dispatch(followingInProgressToggle(false, userId))
+            })
+    }
+}
+
+export const unfollow = (userId) => {
+    return (dispatch) => {
+        dispatch(followingInProgressToggle(true, userId))
+        followAPI.unfollow(userId)
+            .then(data => {
+                if (data.resultCode === 0) {
+                    dispatch(followToggle(userId))
+                }
+                dispatch(followingInProgressToggle(false, userId))
+            })
+    }
+}
 export default usersReducer

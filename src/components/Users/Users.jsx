@@ -36,9 +36,9 @@ const Users = (props) => {
             {props.isLoading
                 ? <Preloader/>
                 : props.users.map(u => <User key={u.id}
+                                             follow={props.follow} unfollow={props.unfollow}
                                              followingInProgress={props.followingInProgress}
-                                             followToggle={props.followToggle}
-                                             followingInProgressToggle={props.followingInProgressToggle} {...u} />)
+                                             {...u} />)
 
             }
         </section>

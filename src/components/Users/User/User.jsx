@@ -2,28 +2,13 @@ import React from 'react';
 import s from '../Users.module.css'
 import userBaseImage from '../../../images/userBaseImage.jpg'
 import {Link} from "react-router-dom";
-import {followAPI} from "../../../api/api";
 
 const User = (props) => {
     const onFollowClick = () => {
-        props.followingInProgressToggle(true, props.id)
-        followAPI.follow(props.id)
-            .then(data => {
-                if (data.resultCode === 0) {
-                    props.followToggle(props.id)
-                }
-                props.followingInProgressToggle(false, props.id)
-            })
+        props.follow(props.id)
     }
     const onUnfollowClick = () => {
-        props.followingInProgressToggle(true, props.id)
-        followAPI.unfollow(props.id)
-            .then(data => {
-                if (data.resultCode === 0) {
-                    props.followToggle(props.id)
-                }
-                props.followingInProgressToggle(false, props.id)
-            })
+        props.unfollow(props.id)
     }
     return (
         <div className={s.user}>
