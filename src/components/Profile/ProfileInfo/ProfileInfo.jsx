@@ -1,4 +1,5 @@
 import s from './ProfileInfo.module.css'
+import ProfileStatus from "./ProfileStatus/ProfileStatus";
 
 const ProfileInfo = ({profile}) => {
     return (
@@ -20,6 +21,7 @@ const ProfileInfo = ({profile}) => {
                     <p>{profile.contacts.instagram}</p>
                 </div>
             </div>
+            <ProfileStatus/>
         </div>
     )
 }

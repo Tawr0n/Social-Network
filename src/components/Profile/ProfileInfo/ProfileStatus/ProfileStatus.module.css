@@ -1,0 +1,11 @@
+.profile__status {
+    padding: 10px;
+}
+
+.status__text {
+    cursor: pointer;
+}
+
+.status__input {
+    padding: 5px;
+}
