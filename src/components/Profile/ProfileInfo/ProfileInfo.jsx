@@ -1,7 +1,7 @@
 import s from './ProfileInfo.module.css'
 import ProfileStatus from "./ProfileStatus/ProfileStatus";
 
-const ProfileInfo = ({profile}) => {
+const ProfileInfo = ({profile, status, updateStatus}) => {
     return (
         <div>
             <div className={s.main__imgBlock}>
@@ -21,7 +21,7 @@ const ProfileInfo = ({profile}) => {
                     <p>{profile.contacts.instagram}</p>
                 </div>
             </div>
-            <ProfileStatus/>
+            <ProfileStatus status={status} updateStatus={updateStatus}/>
         </div>
     )
 }

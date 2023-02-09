@@ -4,23 +4,22 @@ import s from './ProfileStatus.module.css'
 class ProfileStatus extends React.Component {
     state = {
         editMode: false,
-        text: 'Heh',
+        status: this.props.status,
     }
-
     activateEditMode = () => {
         this.setState({
             editMode: true
         })
     }
-    deactivateEditMode = (event) => {
+    deactivateEditMode = () => {
         this.setState({
-            editMode: false,
-            text: event.target.value
+            editMode: false
         })
+        this.props.updateStatus(this.state.status)
     }
-    onChangeStatus = (event) => {
+    onStatusChange = (event) => {
         this.setState({
-            text: event.target.value
+            status: event.currentTarget.value
         })
     }
 
@@ -28,11 +27,12 @@ class ProfileStatus extends React.Component {
         return (
             <div className={s.profile__status}>
                 {this.state.editMode
-                    ? <input onChange={this.onChangeStatus} onBlur={this.deactivateEditMode}
+                    ? <input onChange={this.onStatusChange} onBlur={this.deactivateEditMode}
                              className={s.status__input} type="text"
-                             value={this.state.text} autoFocus={true}/>
+                             value={this.state.status} autoFocus={true}/>
                     :
-                    <span onDoubleClick={this.activateEditMode} className={s.status__text}>{this.state.text}</span>
+                    <span onDoubleClick={this.activateEditMode}
+                          className={s.status__text}>{this.props.status || 'Статус Тут'}</span>
                 }
             </div>
         )
