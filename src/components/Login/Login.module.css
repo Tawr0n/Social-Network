@@ -1,0 +1,28 @@
+.login {
+    padding: 10px;
+}
+
+.login__title {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+.login__form > div:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.login__input {
+    padding: 5px;
+}
+
+.login__button {
+    width: 50px;
+    height: 24px;
+}
+.login__checkboxBlock {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.login__checkboxText {
+    font-size: 13px;
+}
