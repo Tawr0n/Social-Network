@@ -1,4 +1,4 @@
-import {sendMessage, updateNewMessageText} from "../../redux/messagesReducer";
+import {sendMessage} from "../../redux/messagesReducer";
 import Messages from "./Messages";
 import {connect} from "react-redux";
 import withAuthRedirect from "../../hoc/withAuthRedirect";
@@ -9,19 +9,10 @@ const mapStateToProps = (state) => ({
     dialogs: state.messagesPage.dialogs,
     newMessageText: state.messagesPage.newMessageText,
 })
-/*const mapDispatchToProps = (dispatch) => ({
-    sendMessage: () => {
-        dispatch(sendMessageAC())
-    },
-    updateNewMessageText: (message) => {
-        dispatch(updateNewMessageTextAC(message))
-    }
-})*/
 
 export default compose(
     withAuthRedirect,
     connect(mapStateToProps, {
         sendMessage,
-        updateNewMessageText
     })
 )(Messages);
