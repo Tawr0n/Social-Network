@@ -1,0 +1,15 @@
+.formControl {
+}
+
+.formControl__textarea {
+}
+.formControl__error {
+    padding: 5px 0;
+    color: rebeccapurple;
+}
+.formControl__textarea_error,
+.formControl__textarea_error:focus {
+    border: 2px solid rebeccapurple;
+}
+
+

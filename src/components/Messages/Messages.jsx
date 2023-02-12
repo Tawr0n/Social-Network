@@ -3,6 +3,8 @@ import s from './Messages.module.css'
 import Dialog from "./Dialog/Dialog";
 import Message from "./Message/Message";
 import {Field, reduxForm} from "redux-form";
+import {CustomField} from "../UI/FormsControls/FormsControls";
+import {maxLengthCreator, required} from "../../validators/validators";
 
 
 const Messages = ({messages, dialogs, sendMessage}) => {
@@ -24,12 +26,13 @@ const Messages = ({messages, dialogs, sendMessage}) => {
             </div>
         </section>);
 };
-
+const maxLength = maxLengthCreator(10)
 const SendMessageForm = (props) => {
     return (
-        <form onSubmit={props.handleSubmit} className={s.chat__functional}>
-            <Field name={'newMessageText'} className={s.chat__input} placeholder={'Написати повідомлення...'}
-                   component={'textarea'}/>
+        <form onSubmit={props.handleSubmit} className={s.chat__form}>
+            <Field validate={[required, maxLength]} name={'newMessageText'} className={s.chat__input}
+                   placeholder={'Написати повідомлення...'}
+                   component={CustomField} FieldType={'textarea'}/>
             <button className={s.chat__button}>Надіслати</button>
         </form>
     )

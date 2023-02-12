@@ -100,14 +100,21 @@
     margin-bottom: 5px;
 }
 
-.chat__functional {
+.chat__form {
     height: 50px;
     display: grid;
     grid-template-columns: 9fr 1fr;
     gap: 10px;
+    margin-bottom: 10px;
+    position: relative;
+}
+.chat__form > p {
+    position: absolute;
+    bottom: -25px;
 }
 .chat__input {
     padding: 5px;
+    width: 100%;
 }
 .chat__button {
 }
