@@ -18,6 +18,29 @@
     width: 80px;
     border-radius: 20px;
 }
-.header__login > * {
-    color: aliceblue;
+.header__login {
+    margin-right: 20px;
 }
+.loginBlock {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.login__text {
+    background-image: linear-gradient(to left, #f9d423 0%, #ff9222 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 600;
+}
+
+.buttonLogout,
+.buttonLogin {
+    font-weight: 700;
+    padding: 5px;
+    width: 70px;
+    border-radius: 15px;
+    background: linear-gradient(120deg, #f83600 0%, #f9d423 100%);
+}
+
+

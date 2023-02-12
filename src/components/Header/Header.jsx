@@ -1,7 +1,7 @@
 import s from './Header.module.css'
 import {Link} from "react-router-dom";
 
-const Header = ({authData}) => {
+const Header = ({authData, logout}) => {
     return (
         <header className={s.header}>
             <div className={s.header__logo}>
@@ -12,9 +12,12 @@ const Header = ({authData}) => {
             <div className={s.header__login}>
                 {
                     authData.isAuth
-                        ? <span>{authData.login}</span>
+                        ? <div className={s.loginBlock}>
+                            <span className={s.login__text}>{authData.login}</span>
+                            <button onClick={logout} className={s.buttonLogout}>Log out</button>
+                        </div>
                         : <Link to={'/login'}>
-                            Login
+                            <button className={s.buttonLogin}>Log in</button>
                         </Link>
                 }
 
