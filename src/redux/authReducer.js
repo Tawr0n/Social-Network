@@ -1,4 +1,5 @@
 import {authAPI} from "../api/api";
+import {stopSubmit} from "redux-form";
 
 const SET_AUTHORIZED_USER_DATA = 'SET_AUTHORIZED_USER_DATA'
 const RESET_AUTHORIZED_USER_DATA = 'RESET_AUTHORIZED_USER_DATA'
@@ -50,6 +51,9 @@ export const login = (loginData) => (dispatch) => {
     authAPI.login(loginData).then(payload => {
         if (payload.resultCode === 0) {
             dispatch(authMe())
+        } else {
+            const errorMessage = payload.messages.length > 0 ? payload.messages : 'Error'
+            dispatch(stopSubmit('login',{_error: errorMessage}))
         }
     })
 }

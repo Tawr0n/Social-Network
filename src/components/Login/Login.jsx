@@ -26,6 +26,12 @@ const LoginForm = (props) => {
             <div>
                 <button className={s.login__button}>Login</button>
             </div>
+            {
+                props.error && <div className={s.login__error}>
+                    {props.error}
+                </div>
+            }
+
         </form>
     )
 }
@@ -37,7 +43,6 @@ const LoginReduxForm = reduxForm({
 const Login = ({isAuth, login}) => {
 
     const onSubmit = (formData) => {
-        console.log(formData)
         login(formData)
     }
 
