@@ -1,13 +1,20 @@
 import {connect} from "react-redux";
 import Users from "./Users";
-import {follow, getUsers, getUsersOnClick, unfollow} from "../../redux/usersReducer";
+import {follow, getUsersOnClick, requestUsers, unfollow} from "../../redux/usersReducer";
 import React from "react";
+import {
+    getActivePage, getFollowingInProgress,
+    getIsLoading,
+    getPageSize,
+    getTotalUsersCount,
+    getUsers
+} from "../../redux/usersSelectors";
 
 
 class UsersContainer extends React.Component {
 
     componentDidMount() {
-        this.props.getUsers(this.props.activePage, this.props.pageSize, this.props.users)
+        this.props.requestUsers(this.props.activePage, this.props.pageSize, this.props.users)
     }
 
     onPageClick = (pageNumber) => {
@@ -26,16 +33,16 @@ class UsersContainer extends React.Component {
 
 
 const mapStateToProps = (state) => ({
-    users: state.usersPage.users,
-    pageSize: state.usersPage.pageSize,
-    totalUsersCount: state.usersPage.totalUsersCount,
-    activePage: state.usersPage.activePage,
-    isLoading: state.usersPage.isLoading,
-    followingInProgress: state.usersPage.followingInProgress,
+    users: getUsers(state),
+    pageSize: getPageSize(state),
+    totalUsersCount: getTotalUsersCount(state),
+    activePage: getActivePage(state),
+    isLoading: getIsLoading(state),
+    followingInProgress: getFollowingInProgress(state),
 })
 
 export default connect(mapStateToProps, {
-    getUsers,
+    requestUsers,
     getUsersOnClick,
     follow,
     unfollow

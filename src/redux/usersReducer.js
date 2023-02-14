@@ -103,7 +103,7 @@ export const followingInProgressToggle = (isFollowingInProgress, userId) => ({
     type: FOLLOWING_IN_PROGRESS_TOGGLE,
     isFollowingInProgress, userId
 })
-export const getUsers = (activePage = 1, pageSize = 5, users) => {
+export const requestUsers = (activePage = 1, pageSize = 5, users) => {
     return dispatch => {
         if (users.length === 0) {
             dispatch(loadingToggle(true))
