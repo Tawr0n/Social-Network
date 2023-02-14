@@ -37,14 +37,12 @@ const resetAuthorizedUserData = () => ({
     type: RESET_AUTHORIZED_USER_DATA
 })
 
-export const authMe = () => {
-    return dispatch => {
-        authAPI.authMe().then(payload => {
-            if (payload.resultCode === 0) {
-                dispatch(setAuthorizedUserData(payload.data))
-            }
-        })
-    }
+export const authMe = () => (dispatch) => {
+    return authAPI.authMe().then(payload => {
+        if (payload.resultCode === 0) {
+            dispatch(setAuthorizedUserData(payload.data))
+        }
+    })
 }
 
 export const login = (loginData) => (dispatch) => {
@@ -53,7 +51,7 @@ export const login = (loginData) => (dispatch) => {
             dispatch(authMe())
         } else {
             const errorMessage = payload.messages.length > 0 ? payload.messages : 'Error'
-            dispatch(stopSubmit('login',{_error: errorMessage}))
+            dispatch(stopSubmit('login', {_error: errorMessage}))
         }
     })
 }
