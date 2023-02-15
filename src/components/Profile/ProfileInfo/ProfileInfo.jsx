@@ -1,5 +1,5 @@
 import s from './ProfileInfo.module.css'
-import ProfileStatus from "./ProfileStatus/ProfileStatus";
+import ProfileStatusWithHooks from "./ProfileStatus/ProfileStatusWithHooks";
 
 const ProfileInfo = ({profile, status, updateStatus}) => {
     return (
@@ -21,7 +21,7 @@ const ProfileInfo = ({profile, status, updateStatus}) => {
                     <p>{profile.contacts.instagram}</p>
                 </div>
             </div>
-            <ProfileStatus status={status} updateStatus={updateStatus}/>
+            <ProfileStatusWithHooks status={status} updateStatus={updateStatus}/>
         </div>
     )
 }
