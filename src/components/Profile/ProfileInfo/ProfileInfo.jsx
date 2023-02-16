@@ -1,3 +1,4 @@
+import React from "react";
 import s from './ProfileInfo.module.css'
 import ProfileStatusWithHooks from "./ProfileStatus/ProfileStatusWithHooks";
 
@@ -26,4 +27,4 @@ const ProfileInfo = ({profile, status, updateStatus}) => {
     )
 }
 
-export default ProfileInfo
+export default React.memo(ProfileInfo)

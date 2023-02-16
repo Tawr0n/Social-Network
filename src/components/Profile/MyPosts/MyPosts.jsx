@@ -5,19 +5,23 @@ import {Field, reduxForm} from "redux-form";
 import {maxLengthCreator, required} from "../../../validators/validators";
 import {CustomField} from "../../UI/FormsControls/FormsControls";
 
-const MyPosts = ({posts, addPost}) => {
-    const onAddPostSubmit = (formData) => {
-        addPost(formData.newPostText)
-    }
-    return (
-        <div className={`main__posts ${s.posts}`}>
-            <h2 className={s.posts__title}>MyPosts</h2>
-            <AddPostReduxForm onSubmit={onAddPostSubmit}/>
-            {posts.map(p => <Post id={p.id} message={p.message} likesCount={p.likesCount} key={p.id}/>)}
-        </div>
+class MyPosts extends React.PureComponent {
+    render() {
+        let {posts, addPost} = this.props;
+        const onAddPostSubmit = (formData) => {
+            addPost(formData.newPostText)
+        }
+        return (
+            <div className={`main__posts ${s.posts}`}>
+                <h2 className={s.posts__title}>MyPosts</h2>
+                <AddPostReduxForm onSubmit={onAddPostSubmit}/>
+                {posts.map(p => <Post id={p.id} message={p.message} likesCount={p.likesCount} key={p.id}/>)}
+            </div>
 
-    )
+        )
+    }
 }
+
 const maxLength = maxLengthCreator(10)
 const AddPostForm = (props) => {
 
