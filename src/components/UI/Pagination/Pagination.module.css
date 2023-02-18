@@ -1,0 +1,13 @@
+.pagination {
+    user-select: none;
+}
+
+.pageNumber {
+    cursor: pointer;
+    padding: 5px;
+}
+
+.pageNumber_selected {
+    font-weight: 800;
+}
+

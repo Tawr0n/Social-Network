@@ -6,7 +6,8 @@ const Friends = ({friends}) => {
         <div className={s.friends}>
             <h2 className={s.friends__title}>Friends</h2>
             <div className={s.friends__list}>
-                {friends.map(friend => <Friend id={friend.id} name={friend.name} image={friend.image}/>)}
+                {friends.map(friend => <Friend id={friend.id} name={friend.name}
+                                               image={friend.image} key={friend.id}/>)}
             </div>
         </div>
     )

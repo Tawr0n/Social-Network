@@ -1,12 +1,15 @@
 import s from './Profile.module.css'
-import MyPosts from "./MyPosts/MyPosts";
 import ProfileInfo from "./ProfileInfo/ProfileInfo";
+import MyPostsContainer from "./MyPosts/MyPostsContainer";
+import Preloader from "../UI/Preloader/Preloader";
+import React from "react";
 
-const Profile = ({profilePage, dispatch}) => {
+const Profile = ({profile, status, updateStatus}) => {
+    if (!profile) return <Preloader/>
     return (
         <div className={s.main}>
-            <ProfileInfo/>
-            <MyPosts posts={profilePage.posts} newPostText={profilePage.newPostText} dispatch={dispatch}/>
+            <ProfileInfo profile={profile} status={status} updateStatus={updateStatus}/>
+            <MyPostsContainer/>
         </div>
     )
 }

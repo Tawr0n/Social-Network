@@ -1,7 +1,6 @@
-const ADD_POST = 'ADD_POST'
-const UPDATE_NEW_POST_TEXT = 'UPDATE_NEW_POST_TEXT'
-const SEND_MESSAGE = 'SEND_MESSAGE'
-const UPDATE_NEW_MESSAGE_TEXT = 'UPDATE_NEW_MESSAGE_TEXT'
+import profileReducer from "./profileReducer";
+import messagesReducer from "./messagesReducer";
+import sidebarReducer from "./sidebarReducer";
 
 let store = {
     _state: {
@@ -71,64 +70,15 @@ let store = {
     },
 
     dispatch(action) {
-        switch (action.type) {
-            case 'ADD_POST': {
-                if (this._state.profilePage.newPostText.length !== 0) {
-                    this._state.profilePage.posts.push({
-                        id: this._state.profilePage.posts.length + 1,
-                        message: this._state.profilePage.newPostText,
-                        likesCount: 0
-                    })
-                    this._state.profilePage.newPostText = ''
-                    this._callSubscriber()
-                }
-                break
-            }
-            case 'UPDATE_NEW_POST_TEXT': {
-                this._state.profilePage.newPostText = action.newText
-                this._callSubscriber()
-                break
-            }
-            case 'SEND_MESSAGE': {
-                if (this._state.messagesPage.newMessageText.length !== 0) {
-                    this._state.messagesPage.messages.push({
-                        id: this._state.messagesPage.messages.length + 1,
-                        message: this._state.messagesPage.newMessageText,
-                    })
-                    this._state.messagesPage.newMessageText = ''
-                    this._callSubscriber()
-                }
-                break
-            }
-            case 'UPDATE_NEW_MESSAGE_TEXT': {
-                this._state.messagesPage.newMessageText = action.newMessage
-                this._callSubscriber()
-                break
-            }
-            default:
-                break
-        }
+        this._state.profilePage = profileReducer(this._state.profilePage, action)
+        this._state.messagesPage = messagesReducer(this._state.messagesPage, action)
+        this._state.sidebar = sidebarReducer(this._state.sidebar, action)
+
+        this._callSubscriber()
     }
 }
-
-export const addPostAC = () => ({
-    type: ADD_POST,
-})
-
-export const updateNewPostTextAC = (text) => ({
-    type: UPDATE_NEW_POST_TEXT,
-    newText: text,
-})
-
-export const sendMessageAC = () => ({
-    type: SEND_MESSAGE,
-})
-export const updateNewMessageTextAC = (message) => ({
-    type: UPDATE_NEW_MESSAGE_TEXT,
-    newMessage: message,
-})
 
 
 export default store
 
-window.store = store
+// window.store = store

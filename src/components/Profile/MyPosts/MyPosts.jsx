@@ -1,36 +1,43 @@
 import React from "react";
 import s from './MyPosts.module.css'
 import Post from "./Post/Post";
-import {addPostAC, updateNewPostTextAC} from "../../../redux/state";
+import {Field, reduxForm} from "redux-form";
+import {maxLengthCreator, required} from "../../../validators/validators";
+import {CustomField} from "../../UI/FormsControls/FormsControls";
 
+class MyPosts extends React.PureComponent {
+    render() {
+        let {posts, addPost} = this.props;
+        const onAddPostSubmit = (formData) => {
+            addPost(formData.newPostText)
+        }
+        return (
+            <div className={`main__posts ${s.posts}`}>
+                <h2 className={s.posts__title}>MyPosts</h2>
+                <AddPostReduxForm onSubmit={onAddPostSubmit}/>
+                {posts.map(p => <Post id={p.id} message={p.message} likesCount={p.likesCount} key={p.id}/>)}
+            </div>
 
-const MyPosts = ({posts, newPostText, dispatch}) => {
-
-    const textareaRef = React.createRef()
-    const onAddPost = () => {
-        dispatch(addPostAC())
+        )
     }
-    const onPostChange = () => {
-        const text = textareaRef.current.value
-        dispatch(updateNewPostTextAC(text))
-    }
+}
+
+const maxLength = maxLengthCreator(10)
+const AddPostForm = (props) => {
+
     return (
-        <div className={`main__posts ${s.posts}`}>
-            <h2 className={s.posts__title}>MyPosts</h2>
+        <form onSubmit={props.handleSubmit}>
             <div>
-                 <textarea onChange={onPostChange} value={newPostText} ref={textareaRef}
-                           className={s.posts__input}
-                           placeholder={'Введіть текст...'}
-                           cols="20"
-                           rows="3"/>
+                <Field validate={[required, maxLength]} name={'newPostText'} component={CustomField}
+                       className={s.posts__input} FieldType={'textarea'}
+                       placeholder={'Введіть текст...'} cols="20" rows="3"/>
             </div>
             <div>
-                <button onClick={onAddPost} className={s.posts__button}>Відправити</button>
+                <button className={s.posts__button}>Відправити</button>
             </div>
-            {posts.map(p => <Post id={p.id} message={p.message} likesCount={p.likesCount}/>)}
-        </div>
-
+        </form>
     )
 }
+const AddPostReduxForm = reduxForm({form: 'post'})(AddPostForm)
 
 export default MyPosts

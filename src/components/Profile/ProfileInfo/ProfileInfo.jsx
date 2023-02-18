@@ -1,6 +1,9 @@
+import React from "react";
 import s from './ProfileInfo.module.css'
+import ProfileStatusWithHooks from "./ProfileStatus/ProfileStatusWithHooks";
+import baseProfileImage from './../../../images/userBaseImage.jpg'
 
-const ProfileInfo = () => {
+const ProfileInfo = ({profile, status, updateStatus}) => {
     return (
         <div>
             <div className={s.main__imgBlock}>
@@ -9,19 +12,21 @@ const ProfileInfo = () => {
                     alt=""/>
             </div>
             <div className={s.main__profile}>
-                <div className={'main__avatar'}>
-                    <img src="src/components/Profile/Profile" alt=""/>
+                <div className={s.main__profileImage}>
+                    <img src={profile.photos.large ? profile.photos.large : baseProfileImage}
+                         alt="profileImage"/>
                 </div>
-                <div className={'main__info'}>
-                    <p>Yaroslav Kit</p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
-                    <p></p>
+                <div className={s.main__info}>
+                    <p>{`id: ${profile.userId}`}</p>
+                    <p>{profile.fullName}</p>
+                    <p>{profile.aboutMe}</p>
+                    <p>{profile.lookingForAJobDescription}</p>
+                    <p>{profile.contacts.instagram}</p>
                 </div>
             </div>
+            <ProfileStatusWithHooks status={status} updateStatus={updateStatus}/>
         </div>
     )
 }
 
-export default ProfileInfo
+export default React.memo(ProfileInfo)
