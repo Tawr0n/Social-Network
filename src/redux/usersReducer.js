@@ -1,11 +1,11 @@
 import {followAPI, usersAPI} from "../api/api";
 
-const FOLLOW_TOGGLE = 'FOLLOW_TOGGLE'
-const SET_USERS = 'SET_STATE'
-const SET_ACTIVE_PAGE = 'SET_ACTIVE_PAGE'
-const SET_TOTAL_USERS_COUNT = 'SET_TOTAL_USERS_COUNT'
-const LOADING_TOGGLE = 'LOADING_TOGGLE'
-const FOLLOWING_IN_PROGRESS_TOGGLE = 'FOLLOWING_IN_PROGRESS_TOGGLE'
+const FOLLOW_TOGGLE = 'users/FOLLOW_TOGGLE'
+const SET_USERS = 'users/SET_STATE'
+const SET_ACTIVE_PAGE = 'users/SET_ACTIVE_PAGE'
+const SET_TOTAL_USERS_COUNT = 'users/SET_TOTAL_USERS_COUNT'
+const LOADING_TOGGLE = 'users/LOADING_TOGGLE'
+const FOLLOWING_IN_PROGRESS_TOGGLE = 'users/FOLLOWING_IN_PROGRESS_TOGGLE'
 
 const initialState = {
     users: [/*{
@@ -103,55 +103,41 @@ export const followingInProgressToggle = (isFollowingInProgress, userId) => ({
     type: FOLLOWING_IN_PROGRESS_TOGGLE,
     isFollowingInProgress, userId
 })
-export const requestUsers = (activePage = 1, pageSize = 5, users) => {
-    return dispatch => {
-        if (users.length === 0) {
-            dispatch(loadingToggle(true))
-
-            usersAPI.getUsers(activePage, pageSize)
-                .then(data => {
-                    dispatch(setUsers(data.items))
-                    dispatch(setTotalUsersCount(data.totalCount))
-                    dispatch(loadingToggle(false))
-                })
-        }
-    }
-}
-export const getUsersOnClick = (pageNumber = 1, pageSize = 5) => {
-    return (dispatch) => {
-        dispatch(setActivePage(pageNumber))
+export const requestUsers = (activePage = 1, pageSize = 5, users) => async (dispatch) => {
+    if (users.length === 0) {
         dispatch(loadingToggle(true))
 
-        usersAPI.getUsers(pageNumber, pageSize)
-            .then(data => {
-                dispatch(setUsers(data.items))
-                dispatch(loadingToggle(false))
-            })
+        const payload = await usersAPI.getUsers(activePage, pageSize)
+        dispatch(setUsers(payload.items))
+        dispatch(setTotalUsersCount(payload.totalCount))
+        dispatch(loadingToggle(false))
     }
 }
-export const follow = (userId) => {
-    return (dispatch) => {
-        dispatch(followingInProgressToggle(true, userId))
-        followAPI.follow(userId)
-            .then(data => {
-                if (data.resultCode === 0) {
-                    dispatch(followToggle(userId))
-                }
-                dispatch(followingInProgressToggle(false, userId))
-            })
-    }
+export const getUsersOnClick = (pageNumber = 1, pageSize = 5) => async (dispatch) => {
+    dispatch(setActivePage(pageNumber))
+    dispatch(loadingToggle(true))
+
+    const payload = await usersAPI.getUsers(pageNumber, pageSize)
+    dispatch(setUsers(payload.items))
+    dispatch(loadingToggle(false))
 }
 
-export const unfollow = (userId) => {
-    return (dispatch) => {
-        dispatch(followingInProgressToggle(true, userId))
-        followAPI.unfollow(userId)
-            .then(data => {
-                if (data.resultCode === 0) {
-                    dispatch(followToggle(userId))
-                }
-                dispatch(followingInProgressToggle(false, userId))
-            })
+const followUnfollowFunctionality = async (dispatch, userId, apiMethod) => {
+    dispatch(followingInProgressToggle(true, userId))
+    const payload = await apiMethod(userId)
+    if (payload.resultCode === 0) {
+        dispatch(followToggle(userId))
     }
+    dispatch(followingInProgressToggle(false, userId))
+}
+export const follow = (userId) => (dispatch) => {
+    const apiMethod = followAPI.follow
+    followUnfollowFunctionality(dispatch, userId, apiMethod)
+
+}
+
+export const unfollow = (userId) => (dispatch) => {
+    const apiMethod = followAPI.unfollow
+    followUnfollowFunctionality(dispatch, userId, apiMethod)
 }
 export default usersReducer

@@ -29,14 +29,3 @@
     flex-direction: column;
     gap: 10px;
 }
-
-.pageNumber {
-    cursor: pointer;
-    padding: 5px;
-}
-.pageNumber_selected {
-    font-weight: 800;
-}
-.pagination {
-    user-select: none;
-}

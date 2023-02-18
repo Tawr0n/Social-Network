@@ -1,6 +1,7 @@
 import React from "react";
 import s from './ProfileInfo.module.css'
 import ProfileStatusWithHooks from "./ProfileStatus/ProfileStatusWithHooks";
+import baseProfileImage from './../../../images/userBaseImage.jpg'
 
 const ProfileInfo = ({profile, status, updateStatus}) => {
     return (
@@ -11,8 +12,9 @@ const ProfileInfo = ({profile, status, updateStatus}) => {
                     alt=""/>
             </div>
             <div className={s.main__profile}>
-                <div className={s.main__avatar}>
-                    <img src={profile.photos.large} alt="userImage"/>
+                <div className={s.main__profileImage}>
+                    <img src={profile.photos.large ? profile.photos.large : baseProfileImage}
+                         alt="profileImage"/>
                 </div>
                 <div className={s.main__info}>
                     <p>{`id: ${profile.userId}`}</p>
