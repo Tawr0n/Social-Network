@@ -1,13 +1,57 @@
 .pagination {
+    height: 50px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+
     user-select: none;
 }
 
 .pageNumber {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid black;
+    border-radius: 50%;
+
     cursor: pointer;
-    padding: 5px;
 }
 
 .pageNumber_selected {
-    font-weight: 800;
+    font-weight: 700;
+    background-color: darkseagreen;
 }
+.arrowButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    border-radius: 50%;
+    background-color: transparent;
+}
+.arrowButton_hidden {
+    visibility: hidden;
+}
+.arrow {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+}
+
+.arrow_left {
+    transform: rotate(135deg);
+}
+
+.arrow_right {
+    transform: rotate(-45deg);
+}
+
+
 

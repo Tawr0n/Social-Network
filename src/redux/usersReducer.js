@@ -25,7 +25,7 @@ const initialState = {
             location: {country: 'Ukraine', city: 'Lviv'}
         },*/],
     totalUsersCount: 0,
-    pageSize: 5,
+    pageSize: 10,
     activePage: 1,
     isLoading: false,
     followingInProgress: [],
