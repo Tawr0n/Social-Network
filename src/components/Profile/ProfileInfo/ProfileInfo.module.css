@@ -10,6 +10,11 @@
     gap: 10px;
     padding: 10px;
 }
+.main__profileImage {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 .main__profileImage img {
     width: 300px;
     height: 300px;

@@ -1,7 +1,12 @@
 import React from 'react'
 import Profile from "./Profile";
 import {connect} from "react-redux";
-import {getUserProfileData, getUserStatus, updateStatus} from "../../redux/profileReducer";
+import {
+    getUserProfileData,
+    getUserStatus,
+    updateImage,
+    updateStatus
+} from "../../redux/profileReducer";
 import {Navigate, useLocation, useNavigate, useParams} from "react-router-dom";
 import {compose} from "redux";
 
@@ -27,7 +32,9 @@ class ProfileContainer extends React.Component {
             return <Navigate to={'/login'}/>
         }
         return <Profile profile={this.props.profile} status={this.props.status}
-                        updateStatus={this.props.updateStatus}/>
+                        isOwner={!this.props.router.params.userId}
+                        updateStatus={this.props.updateStatus}
+                        updateImage={this.props.updateImage}/>
     }
 }
 
@@ -54,7 +61,7 @@ const mapStateToProps = state => ({
 })
 export default compose(
     connect(mapStateToProps, {
-        getUserProfileData, getUserStatus, updateStatus
+        getUserProfileData, getUserStatus, updateStatus, updateImage
     }),
     withRouter
 )(ProfileContainer)

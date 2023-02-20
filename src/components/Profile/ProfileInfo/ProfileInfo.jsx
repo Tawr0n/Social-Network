@@ -3,7 +3,13 @@ import s from './ProfileInfo.module.css'
 import ProfileStatusWithHooks from "./ProfileStatus/ProfileStatusWithHooks";
 import baseProfileImage from './../../../images/userBaseImage.jpg'
 
-const ProfileInfo = ({profile, status, updateStatus}) => {
+const ProfileInfo = ({profile, status, isOwner, updateStatus, updateImage}) => {
+    debugger
+    const onAvatarImageSelected = (e) => {
+        if (e.target.files.length) {
+            updateImage(e.target.files[0])
+        }
+    }
     return (
         <div>
             <div className={s.main__imgBlock}>
@@ -15,6 +21,9 @@ const ProfileInfo = ({profile, status, updateStatus}) => {
                 <div className={s.main__profileImage}>
                     <img src={profile.photos.large ? profile.photos.large : baseProfileImage}
                          alt="profileImage"/>
+                    {
+                        isOwner && <input onChange={onAvatarImageSelected} type='file'/>
+                    }
                 </div>
                 <div className={s.main__info}>
                     <p>{`id: ${profile.userId}`}</p>
