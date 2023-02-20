@@ -1,6 +1,6 @@
 import './App.css';
 import Sidebar from "./components/Sidebar/Sidebar";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {HashRouter, Route, Routes} from "react-router-dom";
 import News from "./components/News/News";
 import Music from "./components/Music/Music";
 import Settings from "./components/Settings/Settings";
@@ -59,11 +59,11 @@ const AppContainer = connect(mapStateToProps, {initializeApp})(App);
 const AppContainerWrapper = () => {
     return (
         // <React.StrictMode>
-        <BrowserRouter>
+        <HashRouter>
             <Provider store={store}>
                 <AppContainer state={store.getState()}/>
             </Provider>
-        </BrowserRouter>
+        </HashRouter>
         // </React.StrictMode>
     )
 }

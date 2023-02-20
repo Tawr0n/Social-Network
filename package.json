@@ -1,6 +1,7 @@
 {
   "name": "harry-potter-social-network",
   "version": "0.1.0",
+  "homepage": "https://tawr0n.github.io/Social-Network/",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
@@ -12,7 +13,6 @@
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.7.0",
-    "react-scripts": "5.0.1",
     "redux": "^4.2.0",
     "redux-form": "^8.3.9",
     "redux-thunk": "^2.4.2",
@@ -23,7 +23,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -49,6 +51,8 @@
     }
   },
   "devDependencies": {
+    "react-scripts": "5.0.1",
+    "gh-pages": "^5.0.0",
     "react-test-renderer": "18.2.0"
   }
 }
