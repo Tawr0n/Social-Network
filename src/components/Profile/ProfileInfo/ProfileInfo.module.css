@@ -10,16 +10,65 @@
     gap: 10px;
     padding: 10px;
 }
+
 .main__profileImage {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
+
 .main__profileImage img {
     width: 300px;
     height: 300px;
 }
-.main__info > p:not(:last-child) {
+
+.info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.info__list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.info__item {
+}
+.info__button {
+    width: 60px;
+    height: 21px;
+    background: darkseagreen;
+}
+
+.item__title {
+    color: teal;
+    margin-right: 5px;
+}
+
+.item__value {
+    font-size: 17px;
+}
+
+.contacts__title {
     margin-bottom: 10px;
+}
+
+.contacts__list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-left: 30px;
+}
+
+.contacts__item {
+    list-style: circle;
+}
+
+.contacts__link {
+    font-style: italic;
+    color: cadetblue;
 }
 

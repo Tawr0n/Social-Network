@@ -1,4 +1,5 @@
 import {profileAPI} from "../api/api";
+import {stopSubmit} from "redux-form";
 
 const ADD_POST = 'profile/ADD_POST'
 const DELETE_POST = 'profile/DELETE_POST'
@@ -95,6 +96,17 @@ export const updateImage = (avatarImage) => async (dispatch) => {
     const payload = await profileAPI.updateProfileImage(avatarImage)
     if (payload.resultCode === 0) {
         dispatch(updateImageSuccess(payload.data.photos))
+    }
+}
+export const updateProfile = (profileData) => async (dispatch, getState) => {
+    const id = getState().auth.id
+    const payload = await profileAPI.updateProfile(profileData)
+    if (payload.resultCode === 0) {
+        dispatch(getUserProfileData(id))
+    } else {
+        const errorMessage = payload.messages.length > 0 ? payload.messages : 'Error'
+        dispatch(stopSubmit('profileData', {_error: errorMessage}))
+        return Promise.reject(errorMessage)
     }
 }
 export default profileReducer

@@ -1,0 +1,102 @@
+.info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.info__list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.info__item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.info__item_checkbox {
+    flex-direction: row;
+    align-items: center;
+}
+.info__buttons {
+    display: flex;
+    gap: 20px;
+    margin-left: 30px;
+}
+.info__button {
+    font-size: 13px;
+    width: 60px;
+    height: 21px;
+    background: darkseagreen;
+}
+.info__button_cancel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f83600;
+    cursor: pointer;
+}
+.info__error {
+    color: #f83600;
+    font-size: 16px;
+    margin-left: 30px;
+}
+
+.item__title {
+    color: teal;
+}
+
+.item__title_checkbox {
+    font-size: 16px;
+}
+
+.item__value {
+    font-size: 17px;
+}
+
+.item__input {
+    max-width: 230px;
+    padding: 5px;
+}
+
+.item__checkbox {
+
+}
+
+.contacts__title {
+
+}
+
+.contacts__list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-left: 30px;
+}
+
+.contacts__item {
+    list-style: circle;
+}
+.contacts__itemBlock {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.contacts__link {
+    font-style: italic;
+    color: cadetblue;
+}
+
+.contacts__input {
+    width: 200px;
+    padding: 5px;
+}
+
+.contacts__text {
+    font-style: italic;
+    color: cadetblue;
+}
