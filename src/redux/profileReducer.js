@@ -87,9 +87,13 @@ export const getUserStatus = (userId) => async (dispatch) => {
     dispatch(setStatus(payload.data))
 }
 export const updateStatus = (status) => async (dispatch) => {
-    const payload = await profileAPI.updateStatus(status)
-    if (payload.resultCode === 0) {
-        dispatch(setStatus(status))
+    try {
+        const payload = await profileAPI.updateStatus(status)
+        if (payload.resultCode === 0) {
+            dispatch(setStatus(status))
+        }
+    } catch (e) {
+        throw new Error('updating status error')
     }
 }
 export const updateImage = (avatarImage) => async (dispatch) => {
