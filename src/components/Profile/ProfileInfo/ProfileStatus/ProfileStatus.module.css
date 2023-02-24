@@ -1,7 +1,11 @@
 .profile__status {
     padding: 10px;
 }
-
+.status__title {
+    font-weight: 700;
+    color: teal;
+    margin-right: 5px;
+}
 .status__text {
     cursor: pointer;
 }
@@ -9,3 +13,4 @@
 .status__input {
     padding: 5px;
 }
+

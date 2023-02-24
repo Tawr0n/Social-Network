@@ -9,8 +9,8 @@ const Users = (props) => {
 
     return (
         <section className={s.users}>
-            <Pagination totalUsersCount={props.totalUsersCount} pageSize={props.pageSize}
-                        activePage={props.activePage} onPageClick={props.onPageClick}/>
+            <Pagination totalItemsCount={props.totalUsersCount} pageSize={props.pageSize}
+                        activePage={props.activePage} onPageClick={props.onPageClick} portionSize={5}/>
             {props.isLoading
                 ? <Preloader/>
                 : props.users.map(u => <User key={u.id}

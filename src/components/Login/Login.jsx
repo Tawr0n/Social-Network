@@ -31,6 +31,14 @@ const LoginForm = (props) => {
                     {props.error}
                 </div>
             }
+            {props.captchaUrl &&
+                <div className={s.captcha}>
+                    <img src={props.captchaUrl} alt="captcha"/>
+                    <Field validate={[required]} component={CustomField} FieldType={'input'}
+                           className={s.login__input} placeholder={'captcha'}
+                           name='captcha'/>
+                </div>
+            }
 
         </form>
     )
@@ -40,7 +48,7 @@ const LoginReduxForm = reduxForm({
     form: 'login',
 })(LoginForm)
 
-const Login = ({isAuth, login}) => {
+const Login = ({isAuth, login, captchaUrl}) => {
 
     const onSubmit = (formData) => {
         login(formData)
@@ -52,13 +60,14 @@ const Login = ({isAuth, login}) => {
             <h2 className={s.login__title}>
                 Login
             </h2>
-            <LoginReduxForm onSubmit={onSubmit}/>
+            <LoginReduxForm onSubmit={onSubmit} captchaUrl={captchaUrl}/>
         </section>
     );
 };
 
 
 const mapDispatchToProps = (state) => ({
-    isAuth: state.auth.isAuth
+    isAuth: state.auth.isAuth,
+    captchaUrl: state.auth.captchaUrl
 })
 export default connect(mapDispatchToProps, {login})(Login);
