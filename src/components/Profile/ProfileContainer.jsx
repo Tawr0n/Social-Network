@@ -1,10 +1,11 @@
-import React from 'react'
+import React from "react";
 import Profile from "./Profile";
 import {connect} from "react-redux";
 import {
     getUserProfileData,
     getUserStatus,
-    updateImage, updateProfile,
+    updateImage,
+    updateProfile,
     updateStatus
 } from "../../redux/profileReducer";
 import {Navigate, useLocation, useNavigate, useParams} from "react-router-dom";
@@ -13,11 +14,12 @@ import {compose} from "redux";
 class ProfileContainer extends React.Component {
     componentDidMount() {
         let userId = this.props.router.params.userId
-        if (!userId) {
-            userId = this.props.authorizedUserId
+        if (!userId) userId = this.props.authorizedUserId
+
+        if (userId) {
+            this.props.getUserProfileData(userId)
+            this.props.getUserStatus(userId)
         }
-        this.props.getUserProfileData(userId)
-        this.props.getUserStatus(userId)
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {

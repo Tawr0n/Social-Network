@@ -1,24 +1,25 @@
 import {connect} from "react-redux";
 import Users from "./Users";
-import {follow, getUsersOnClick, requestUsers, unfollow} from "../../redux/usersReducer";
+import {follow, requestUsers, unfollow} from "../../redux/usersReducer";
 import React from "react";
 import {
-    getActivePage, getFollowingInProgress,
+    getActivePage,
+    getFollowingInProgress,
     getIsLoading,
     getPageSize,
     getTotalUsersCount,
-    getUsers
+    getUsers,
 } from "../../redux/usersSelectors";
 
 
 class UsersContainer extends React.Component {
 
     componentDidMount() {
-        this.props.requestUsers(this.props.activePage, this.props.pageSize, this.props.users)
+        this.props.requestUsers(this.props.activePage, this.props.pageSize)
     }
 
     onPageClick = (pageNumber) => {
-        this.props.getUsersOnClick(pageNumber, this.props.pageSize)
+        this.props.requestUsers(pageNumber, this.props.pageSize)
     }
 
     render() {
@@ -43,7 +44,6 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
     requestUsers,
-    getUsersOnClick,
     follow,
     unfollow
 })(UsersContainer)

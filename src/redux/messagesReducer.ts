@@ -1,5 +1,14 @@
 const SEND_MESSAGE = 'messages/SEND_MESSAGE'
-
+type DialogType = {
+    id: number
+    name: string
+    text: string
+    image: string
+}
+type MessageType = {
+    id: number
+    message: string
+}
 const initialState = {
     dialogs: [
         {
@@ -20,13 +29,14 @@ const initialState = {
             text: 'Як життя, старий?',
             image: 'https://upload.wikimedia.org/wikipedia/en/thumb/5/5e/Ron_Weasley_poster.jpg/220px-Ron_Weasley_poster.jpg',
         },
-    ],
+    ] as Array<DialogType>,
     messages: [
         {id: 1, message: 'Експеліармус'},
         {id: 2, message: 'Акціо'},
-    ],
+    ] as Array<MessageType>,
 }
-const messagesReducer = (state = initialState, action) => {
+type InitialStateType = typeof initialState
+const messagesReducer = (state = initialState, action: any): InitialStateType => {
     switch (action.type) {
         case SEND_MESSAGE:
             if (action.newMessage) {
@@ -46,7 +56,11 @@ const messagesReducer = (state = initialState, action) => {
 
 
 }
-export const sendMessage = (newMessage) => ({
+type SendMessageActionType = {
+    type: typeof SEND_MESSAGE
+    newMessage: string
+}
+export const sendMessage = (newMessage: string): SendMessageActionType => ({
     type: SEND_MESSAGE,
     newMessage
 })

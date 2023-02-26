@@ -1,4 +1,12 @@
-const initialState = {
+type FriendType = {
+    id: number
+    name: string
+    image: string
+}
+type InitialStateType = {
+    friends: Array<FriendType>
+}
+const initialState: InitialStateType = {
     friends: [
         {
             id: 1,
@@ -18,7 +26,7 @@ const initialState = {
     ]
 }
 
-const sidebarReducer = (state = initialState, action) => {
+const sidebarReducer = (state = initialState, action: any): InitialStateType => {
 
     return state
 }

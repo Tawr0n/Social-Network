@@ -1,4 +1,5 @@
 import {followAPI, usersAPI} from "../api/api";
+import {UserType} from "../types/types";
 
 const FOLLOW_TOGGLE = 'users/FOLLOW_TOGGLE'
 const SET_USERS = 'users/SET_STATE'
@@ -7,31 +8,18 @@ const SET_TOTAL_USERS_COUNT = 'users/SET_TOTAL_USERS_COUNT'
 const LOADING_TOGGLE = 'users/LOADING_TOGGLE'
 const FOLLOWING_IN_PROGRESS_TOGGLE = 'users/FOLLOWING_IN_PROGRESS_TOGGLE'
 
+
 const initialState = {
-    users: [/*{
-        id: 1,
-        fullName: 'Kit Yaroslav',
-        image: 'https://i.pinimg.com/736x/c5/83/0d/c5830de74df706029f95b41d36f420a2.jpg',
-        isFollowed: true,
-        status: 'I`m a ukrainian',
-        location: {country: 'Ukraine', city: 'Lviv'}
-    },
-        {
-            id: 2,
-            fullName: 'Pennings Daniel',
-            image: 'https://i.pinimg.com/736x/c5/83/0d/c5830de74df706029f95b41d36f420a2.jpg',
-            isFollowed: false,
-            status: 'Летючий голандець',
-            location: {country: 'Ukraine', city: 'Lviv'}
-        },*/],
+    users: [] as Array<UserType>,
     totalUsersCount: 0,
-    pageSize: 10,
+    pageSize: 5,
     activePage: 1,
     isLoading: false,
-    followingInProgress: [],
+    followingInProgress: [] as Array<number>, //array of users id
 }
+type InitialStateType = typeof initialState
 
-const usersReducer = (state = initialState, action) => {
+const usersReducer = (state = initialState, action: any): InitialStateType => {
     switch (action.type) {
         case FOLLOW_TOGGLE:
             return {
@@ -79,50 +67,68 @@ const usersReducer = (state = initialState, action) => {
 
 
 }
-export const followToggle = (userId) => ({
+type FollowToggleActionType = {
+    type: typeof FOLLOW_TOGGLE
+    userId: number
+}
+export const followToggle = (userId: number): FollowToggleActionType => ({
     type: FOLLOW_TOGGLE,
     userId
 })
-export const loadingToggle = (isLoading) => ({
+type LoadingToggleActionType = {
+    type: typeof LOADING_TOGGLE
+    isLoading: boolean
+}
+export const loadingToggle = (isLoading: boolean): LoadingToggleActionType => ({
     type: LOADING_TOGGLE,
     isLoading
 })
-export const setUsers = (users) => ({
+
+type SetUsersActionType = {
+    type: typeof SET_USERS
+    users: Array<UserType>
+}
+export const setUsers = (users: Array<UserType>): SetUsersActionType => ({
     type: SET_USERS,
     users
 })
-export const setActivePage = (activePage) => ({
+type SetActivePageActionType = {
+    type: typeof SET_ACTIVE_PAGE
+    activePage: number
+}
+export const setActivePage = (activePage: number): SetActivePageActionType => ({
     type: SET_ACTIVE_PAGE,
     activePage
 })
-export const setTotalUsersCount = (totalUsersCount) => ({
+type SetTotalUsersCountActionType = {
+    type: typeof SET_TOTAL_USERS_COUNT
+    totalUsersCount: number
+}
+export const setTotalUsersCount = (totalUsersCount: number): SetTotalUsersCountActionType => ({
     type: SET_TOTAL_USERS_COUNT,
     totalUsersCount
 })
-export const followingInProgressToggle = (isFollowingInProgress, userId) => ({
+type FollowingInProgressToggleActionType = {
+    type: typeof FOLLOWING_IN_PROGRESS_TOGGLE
+    isFollowingInProgress: boolean
+    userId: number
+}
+export const followingInProgressToggle = (isFollowingInProgress: boolean, userId: number): FollowingInProgressToggleActionType => ({
     type: FOLLOWING_IN_PROGRESS_TOGGLE,
     isFollowingInProgress, userId
 })
-export const requestUsers = (activePage = 1, pageSize = 5, users) => async (dispatch) => {
-    if (users.length === 0) {
-        dispatch(loadingToggle(true))
-
-        const payload = await usersAPI.getUsers(activePage, pageSize)
-        dispatch(setUsers(payload.items))
-        dispatch(setTotalUsersCount(payload.totalCount))
-        dispatch(loadingToggle(false))
-    }
-}
-export const getUsersOnClick = (pageNumber = 1, pageSize = 5) => async (dispatch) => {
-    dispatch(setActivePage(pageNumber))
+export const requestUsers = (pageNumber = 1, pageSize = 5) => async (dispatch: any, getState: any) => {
     dispatch(loadingToggle(true))
-
+    dispatch(setActivePage(pageNumber))
     const payload = await usersAPI.getUsers(pageNumber, pageSize)
     dispatch(setUsers(payload.items))
+    if (!getState().usersPage.totalUsersCount) {
+        dispatch(setTotalUsersCount(payload.totalCount))
+    }
     dispatch(loadingToggle(false))
 }
 
-const followUnfollowFunctionality = async (dispatch, userId, apiMethod) => {
+const followUnfollowFunctionality = async (dispatch: any, userId: number, apiMethod: any) => {
     dispatch(followingInProgressToggle(true, userId))
     const payload = await apiMethod(userId)
     if (payload.resultCode === 0) {
@@ -130,13 +136,13 @@ const followUnfollowFunctionality = async (dispatch, userId, apiMethod) => {
     }
     dispatch(followingInProgressToggle(false, userId))
 }
-export const follow = (userId) => (dispatch) => {
+export const follow = (userId: number) => (dispatch: any) => {
     const apiMethod = followAPI.follow
     followUnfollowFunctionality(dispatch, userId, apiMethod)
 
 }
 
-export const unfollow = (userId) => (dispatch) => {
+export const unfollow = (userId: number) => (dispatch: any) => {
     const apiMethod = followAPI.unfollow
     followUnfollowFunctionality(dispatch, userId, apiMethod)
 }

@@ -5,7 +5,15 @@ const SET_AUTHORIZED_USER_DATA = 'auth/SET_AUTHORIZED_USER_DATA'
 const RESET_AUTHORIZED_USER_DATA = 'auth/RESET_AUTHORIZED_USER_DATA'
 const GET_CAPTCHA_URL_SUCCESS = 'auth/GET_CAPTCHA_URL_SUCCESS'
 
-const initialState = {
+type InitialStateType = {
+    id: number | null
+    email: string | null
+    login: string | null
+    isAuth: boolean
+    captchaUrl: string | null
+}
+
+const initialState: InitialStateType = {
     id: null,
     email: null,
     login: null,
@@ -13,7 +21,7 @@ const initialState = {
     captchaUrl: null
 }
 
-const authReducer = (state = initialState, action) => {
+const authReducer = (state = initialState, action: any): InitialStateType => {
     switch (action.type) {
         case SET_AUTHORIZED_USER_DATA:
             return {
@@ -36,26 +44,49 @@ const authReducer = (state = initialState, action) => {
     }
 
 }
-const setAuthorizedUserData = (payload) => ({
+type SetAuthorizedUserDataActionPayloadType = {
+    id: number
+    email: string
+    login: string
+}
+type SetAuthorizedUserDataActionType = {
+    type: typeof SET_AUTHORIZED_USER_DATA
+    payload: SetAuthorizedUserDataActionPayloadType
+}
+const setAuthorizedUserData = (payload: SetAuthorizedUserDataActionPayloadType): SetAuthorizedUserDataActionType => ({
     type: SET_AUTHORIZED_USER_DATA,
     payload
 })
-const resetAuthorizedUserData = () => ({
+
+type ResetAuthorizedUserDataActionType = {
+    type: typeof RESET_AUTHORIZED_USER_DATA
+}
+const resetAuthorizedUserData = (): ResetAuthorizedUserDataActionType => ({
     type: RESET_AUTHORIZED_USER_DATA
 })
-const getCaptchaUrlSuccess = (captchaUrl) => ({
+type GetCaptchaUrlSuccessActionType = {
+    type: typeof GET_CAPTCHA_URL_SUCCESS
+    captchaUrl: string
+}
+const getCaptchaUrlSuccess = (captchaUrl: string): GetCaptchaUrlSuccessActionType => ({
     type: GET_CAPTCHA_URL_SUCCESS,
     captchaUrl
 })
 
-export const authMe = () => async (dispatch) => {
+export const authMe = () => async (dispatch: any) => {
     const payload = await authAPI.authMe()
     if (payload.resultCode === 0) {
         dispatch(setAuthorizedUserData(payload.data))
     }
 }
 
-export const login = (loginData) => async (dispatch) => {
+type LoginDataType = {
+    email: string
+    password: string
+    rememberMe?: boolean
+    captcha?: string
+}
+export const login = (loginData: LoginDataType) => async (dispatch: any) => {
     const payload = await authAPI.login(loginData)
     if (payload.resultCode === 0) {
         dispatch(authMe())
@@ -68,14 +99,14 @@ export const login = (loginData) => async (dispatch) => {
     }
 }
 
-export const logout = () => async (dispatch) => {
+export const logout = () => async (dispatch: any) => {
     const payload = await authAPI.logout()
     if (payload.resultCode === 0) {
         dispatch(resetAuthorizedUserData())
     }
 }
 
-export const getCaptchaUrl = () => async (dispatch) => {
+export const getCaptchaUrl = () => async (dispatch: any) => {
     const payload = await securityAPI.getCaptchaUrl()
     const captchaUrl = payload.url
     dispatch(getCaptchaUrlSuccess(captchaUrl))
