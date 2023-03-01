@@ -2,15 +2,27 @@ import React from 'react';
 import s from './Pagination.module.css'
 import classNames from "classnames";
 
+type PropsType = {
+    totalItemsCount: number
+    pageSize: number
+    activePage: number
+    onPageClick: (pageNumber: number) => void
+    portionSize: number
+}
+const Pagination: React.FC<PropsType> = ({
+                                             totalItemsCount,
+                                             pageSize,
+                                             activePage = 1,
+                                             onPageClick,
+                                             portionSize = 5
+                                         }) => {
 
-const Pagination = ({totalItemsCount, pageSize, activePage = 1, onPageClick, portionSize = 5}) => {
-
-    const pagesCount = Math.ceil(totalItemsCount / pageSize)
-    const pages = []
+    const pagesCount: number = Math.ceil(totalItemsCount / pageSize)
+    const pages: Array<number> = []
     for (let i = 1; i <= pagesCount; i++) {
         pages.push(i)
     }
-    let slicedPages
+    let slicedPages: Array<number>
     if (activePage < Math.floor(portionSize / 2) + 1) {
         slicedPages = pages.slice(0, portionSize)
     } else if (pagesCount - activePage < Math.ceil(portionSize / 2)) {

@@ -11,18 +11,44 @@ import React, {Component, Suspense} from "react";
 import {connect, Provider} from "react-redux";
 import Preloader from "./components/UI/Preloader/Preloader";
 import {addGlobalError, initializeApp, removeGlobalError} from "./redux/appReducer";
-import store from "./redux/reduxStore";
+import store, {AppStateType} from "./redux/reduxStore";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 const UsersContainer = React.lazy(() => import('./components/Users/UsersContainer'));
 const MessagesContainer = React.lazy(() => import('./components/Messages/MessagesContainer'));
 
-class App extends Component {
-    catchAllUnhandledErrors = (e) => {
+
+type TStateProps = {
+    isInitialized: boolean
+    globalErrors: Array<string>
+}
+type TDispatchProps = {
+    initializeApp: () => void
+    addGlobalError: (errorMessage: string) => void
+    removeGlobalError: () => void
+}
+type TOwnProps = {
+    state: AppStateType
+}
+type PropsType = TStateProps & TDispatchProps & TOwnProps
+
+class App extends Component<PropsType> {
+    // e: PromiseRejectionEvent & ErrorEvent
+    catchAllUnhandledErrors = (e: any) => {
         let errorMessage = e.message ? e.message : e.reason.message;
         this.props.addGlobalError(errorMessage)
-        toast.error(errorMessage)
+        toast.error(errorMessage, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            onClose: () => this.props.removeGlobalError()
+        })
     }
 
     componentDidMount() {
@@ -62,31 +88,22 @@ class App extends Component {
                             </Routes>
                         </Suspense>
                     </main>
-                    {this.props.globalErrors.length > 0 &&
-                        <ToastContainer
-                            onClose={() => this.props.removeGlobalError()}
-                            position="bottom-right"
-                            autoClose={5000}
-                            hideProgressBar={false}
-                            newestOnTop={false}
-                            closeOnClick
-                            rtl={false}
-                            pauseOnFocusLoss
-                            draggable
-                            pauseOnHover
-                            theme="light"/>
-                    }
+                    {this.props.globalErrors.length > 0 && <ToastContainer/>}
                 </div>
             </div>
         );
     }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: AppStateType): TStateProps => ({
     isInitialized: state.app.isInitialized,
     globalErrors: state.app.globalErrors
 })
-const AppContainer = connect(mapStateToProps, {initializeApp, addGlobalError, removeGlobalError})(App);
+const AppContainer = connect<TStateProps, TDispatchProps, TOwnProps, AppStateType>(mapStateToProps, {
+    initializeApp,
+    addGlobalError,
+    removeGlobalError
+})(App);
 
 const AppContainerWrapper = () => {
     return (

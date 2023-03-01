@@ -1,33 +1,37 @@
-import React from 'react';
+import React, {FC} from 'react';
 import s from './Messages.module.css'
 import Dialog from "./Dialog/Dialog";
 import Message from "./Message/Message";
-import {Field, reduxForm} from "redux-form";
+import {Field, InjectedFormProps, reduxForm} from "redux-form";
 import {CustomField} from "../UI/FormsControls/FormsControls";
 import {maxLengthCreator, required} from "../../validators/validators";
+import {MessagesPropsType} from "./MessagesContainer";
 
+type FormDataType = { newMessageText: string }
+const Messages: FC<MessagesPropsType> = ({messages, dialogs, sendMessage}) => {
 
-const Messages = ({messages, dialogs, sendMessage}) => {
-
-    const addNewMessage = (formData) => {
+    const addNewMessage = (formData: FormDataType) => {
         sendMessage(formData.newMessageText)
     }
 
     return (
         <section className={s.section}>
             <div className={s.dialogs}>
-                {dialogs.map(d => <Dialog id={d.id} name={d.name} text={d.text} image={d.image} key={d.id}/>)}
+                {dialogs.map(d => <Dialog dialog={d} key={d.id}/>)}
             </div>
             <div className={s.chat}>
                 <div className={s.messages}>
-                    {messages.map(m => <Message id={m.id} message={m.message} key={m.id}/>)}
+                    {messages.map(m => <Message message={m} key={m.id}/>)}
                 </div>
                 <SendMessageReduxForm onSubmit={addNewMessage}/>
             </div>
         </section>);
 };
-const maxLength = maxLengthCreator(10)
-const SendMessageForm = (props) => {
+const maxLength: (value: string) => string | undefined = maxLengthCreator(10)
+type SendMessageFormPropsType = {
+    onSubmit: (formData: FormDataType) => void
+}
+const SendMessageForm: React.FC<InjectedFormProps<FormDataType, SendMessageFormPropsType>> = (props) => {
     return (
         <form onSubmit={props.handleSubmit} className={s.chat__form}>
             <Field validate={[required, maxLength]} name={'newMessageText'} className={s.chat__input}
@@ -37,6 +41,6 @@ const SendMessageForm = (props) => {
         </form>
     )
 }
-const SendMessageReduxForm = reduxForm({form: 'dialog'})(SendMessageForm)
+const SendMessageReduxForm = reduxForm<FormDataType, SendMessageFormPropsType>({form: 'dialog'})(SendMessageForm)
 
 export default Messages;

@@ -1,8 +1,5 @@
-type FriendType = {
-    id: number
-    name: string
-    image: string
-}
+import {FriendType} from "../types/types";
+
 type InitialStateType = {
     friends: Array<FriendType>
 }

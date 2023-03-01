@@ -10,15 +10,33 @@ import {
     getTotalUsersCount,
     getUsers,
 } from "../../redux/usersSelectors";
+import {UserType} from "../../types/types";
+import {AppStateType} from "../../redux/reduxStore";
 
 
-class UsersContainer extends React.Component {
+type MapStatePropsType = {
+    users: Array<UserType>
+    pageSize: number
+    totalUsersCount: number
+    activePage: number
+    isLoading: boolean
+    followingInProgress: Array<number>
+}
+type MapDispatchPropsType = {
+    requestUsers: (pageNumber: number, pageSize: number) => void
+    follow: (id: number) => void
+    unfollow: (id: number) => void
+}
+type OwnPropsType = {}
+type PropsType = MapStatePropsType & MapDispatchPropsType & OwnPropsType
+
+class UsersContainer extends React.Component<PropsType> {
 
     componentDidMount() {
         this.props.requestUsers(this.props.activePage, this.props.pageSize)
     }
 
-    onPageClick = (pageNumber) => {
+    onPageClick = (pageNumber: number) => {
         this.props.requestUsers(pageNumber, this.props.pageSize)
     }
 
@@ -33,7 +51,7 @@ class UsersContainer extends React.Component {
 }
 
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: AppStateType): MapStatePropsType => ({
     users: getUsers(state),
     pageSize: getPageSize(state),
     totalUsersCount: getTotalUsersCount(state),
@@ -42,7 +60,8 @@ const mapStateToProps = (state) => ({
     followingInProgress: getFollowingInProgress(state),
 })
 
-export default connect(mapStateToProps, {
+// TStateProps = {}, TDispatchProps = {}, TOwnProps = {}, State = DefaultState
+export default connect<MapStatePropsType, MapDispatchPropsType, OwnPropsType, AppStateType>(mapStateToProps, {
     requestUsers,
     follow,
     unfollow

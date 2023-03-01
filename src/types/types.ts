@@ -19,11 +19,23 @@ export type PhotosType = {
 }
 export type ProfileType = {
     userId: number
+    aboutMe: string
     lookingForAJob: boolean
     lookingForAJobDescription: string
     fullName: string
     contacts: ContactsType
     photos: PhotosType
+}
+
+export type DialogType = {
+    id: number
+    name: string
+    text: string
+    image: string
+}
+export type MessageType = {
+    id: number
+    message: string
 }
 
 export type UserType = {
@@ -33,3 +45,15 @@ export type UserType = {
     photos: PhotosType
     followed: boolean
 }
+export type FriendType = {
+    id: number
+    name: string
+    image: string
+}
+
+export type ContactPropsType = {
+    contactTitle: string
+    contactValue?: string
+}
+
+export type IsActiveType = { isActive: boolean }

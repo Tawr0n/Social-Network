@@ -1,9 +1,15 @@
-import React, {useEffect, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import s from './ProfileStatus.module.css'
 
-const ProfileStatusWithHooks = (props) => {
-    const [status, setStatus] = useState(props.status)
-    const [editMode, setEditMode] = useState(false)
+type PropsType = {
+    status: string
+    isOwner: boolean
+    updateStatus: (status: string) => void
+}
+const ProfileStatusWithHooks: FC<PropsType> = (props) => {
+    // якщо useState проініціалізований, то можна тип не уточнювати
+    const [status, setStatus] = useState<string>(props.status)
+    const [editMode, setEditMode] = useState<boolean>(false)
     useEffect(() => {
         setStatus(props.status)
     }, [props.status])
@@ -15,7 +21,7 @@ const ProfileStatusWithHooks = (props) => {
         setEditMode(false)
         props.updateStatus(status)
     }
-    const onStatusChange = (event) => {
+    const onStatusChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
         setStatus(event.currentTarget.value)
     }
     return (

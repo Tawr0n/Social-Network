@@ -1,10 +1,21 @@
-import React from "react";
+import React, {FC} from "react";
 import s from "./ProfileDataForm.module.css";
-import {Field, reduxForm} from "redux-form";
+import {Field, reduxForm, InjectedFormProps} from "redux-form";
 import {CustomField} from "../../../UI/FormsControls/FormsControls";
 import classNames from "classnames";
+import {ContactPropsType, ProfileType} from "../../../../types/types";
 
-const ProfileDataForm = ({profile, setEditMode, error, ...props}) => {
+type PropsType = {
+    profile: ProfileType
+    setEditMode: (editMode: boolean) => void
+    error?: string
+}
+const ProfileDataForm: FC<InjectedFormProps<ProfileType, PropsType> & PropsType> = ({
+                                                                                        profile,
+                                                                                        setEditMode,
+                                                                                        error,
+                                                                                        ...props
+                                                                                    }) => {
     return (
         <form onSubmit={props.handleSubmit} className={s.info}>
             <div className={s.info__list}>
@@ -56,7 +67,8 @@ const ProfileDataForm = ({profile, setEditMode, error, ...props}) => {
         </form>
     )
 }
-const Contact = ({contactTitle}) => {
+
+const Contact: FC<ContactPropsType> = ({contactTitle}) => {
     return (
         <li className={s.contacts__item}>
             <div className={s.contacts__itemBlock}>
@@ -69,6 +81,6 @@ const Contact = ({contactTitle}) => {
 };
 
 // параметри enableReinitialize: true, destroyOnUnmount: false (допомагають, якщо є Strict.mode)
-const ProfileDataReduxForm = reduxForm({form: 'profileData'})(ProfileDataForm)
+const ProfileDataReduxForm = reduxForm<ProfileType, PropsType>({form: 'profileData'})(ProfileDataForm)
 
 export default ProfileDataReduxForm;

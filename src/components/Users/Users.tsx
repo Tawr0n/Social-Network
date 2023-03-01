@@ -3,9 +3,20 @@ import s from './Users.module.css'
 import User from "./User/User";
 import Preloader from "../UI/Preloader/Preloader";
 import Pagination from "../UI/Pagination/Pagination";
+import {UserType} from "../../types/types";
 
-
-const Users = (props) => {
+type PropsType = {
+    users: Array<UserType>
+    activePage: number
+    totalUsersCount: number
+    pageSize: number
+    isLoading: boolean
+    follow: (id: number) => void
+    unfollow: (id: number) => void
+    followingInProgress: Array<number>
+    onPageClick: (pageNumber: number) => void
+}
+const Users: React.FC<PropsType> = (props) => {
 
     return (
         <section className={s.users}>
@@ -13,10 +24,9 @@ const Users = (props) => {
                         activePage={props.activePage} onPageClick={props.onPageClick} portionSize={5}/>
             {props.isLoading
                 ? <Preloader/>
-                : props.users.map(u => <User key={u.id}
+                : props.users.map(u => <User key={u.id} user={u}
                                              follow={props.follow} unfollow={props.unfollow}
-                                             followingInProgress={props.followingInProgress}
-                                             {...u} />)
+                                             followingInProgress={props.followingInProgress}/>)
 
             }
         </section>

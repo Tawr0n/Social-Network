@@ -10,10 +10,35 @@ import {
 } from "../../redux/profileReducer";
 import {Navigate, useLocation, useNavigate, useParams} from "react-router-dom";
 import {compose} from "redux";
+import {AppStateType} from "../../redux/reduxStore";
+import {ProfileType} from "../../types/types";
 
-class ProfileContainer extends React.Component {
+type MapStatePropsType = {
+    profile: ProfileType | null
+    status: string
+    authorizedUserId: number | null
+}
+type MapDispatchPropsType = {
+    getUserProfileData: (userId: number | null) => void
+    getUserStatus: (userId: number | null) => void
+    updateStatus: (status: string) => void
+    updateImage: (file: File) => void
+    updateProfile: (profile: ProfileType) => Promise<void>
+}
+type OwnPropsType = {}
+type WithRouterProps = {
+    router: {
+        location: ReturnType<typeof useLocation>
+        navigate: ReturnType<typeof useNavigate>
+        params: Record<string, string>
+    }
+}
+type PropsType = MapStatePropsType & MapDispatchPropsType & OwnPropsType & WithRouterProps
+type StateType = {}
+
+class ProfileContainer extends React.Component<PropsType, StateType> {
     componentDidMount() {
-        let userId = this.props.router.params.userId
+        let userId: number | null = +this.props.router.params.userId
         if (!userId) userId = this.props.authorizedUserId
 
         if (userId) {
@@ -22,7 +47,7 @@ class ProfileContainer extends React.Component {
         }
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps: PropsType, prevState: StateType) {
         if (this.props.router.params.userId !== prevProps.router.params.userId) {
             this.props.getUserProfileData(this.props.authorizedUserId)
             this.props.getUserStatus(this.props.authorizedUserId)
@@ -41,14 +66,15 @@ class ProfileContainer extends React.Component {
     }
 }
 
-function withRouter(Component) {
-    function ComponentWithRouterProp(props) {
+
+function withRouter<Props extends WithRouterProps>(Component: React.ComponentType<Props>) {
+    function ComponentWithRouterProp(props: Omit<Props, keyof WithRouterProps>) {
         let location = useLocation();
         let navigate = useNavigate();
         let params = useParams();
         return (
             <Component
-                {...props}
+                {...(props as Props)}
                 router={{location, navigate, params}}
             />
         );
@@ -57,12 +83,13 @@ function withRouter(Component) {
     return ComponentWithRouterProp;
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: AppStateType): MapStatePropsType => ({
     profile: state.profilePage.profile,
     status: state.profilePage.status,
     authorizedUserId: state.auth.id
 })
-export default compose(
+//<React.Component<PropsType>> або просто <PropsType>
+export default compose<React.ComponentType>(
     connect(mapStateToProps, {
         getUserProfileData, getUserStatus, updateStatus, updateImage, updateProfile
     }),

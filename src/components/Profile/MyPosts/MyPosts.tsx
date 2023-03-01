@@ -1,14 +1,17 @@
 import React from "react";
 import s from './MyPosts.module.css'
 import Post from "./Post/Post";
-import {Field, reduxForm} from "redux-form";
+import {Field, InjectedFormProps, reduxForm} from "redux-form";
 import {maxLengthCreator, required} from "../../../validators/validators";
 import {CustomField} from "../../UI/FormsControls/FormsControls";
+import {MyPostsPropsType} from "./MyPostsContainer";
 
-class MyPosts extends React.PureComponent {
+type FormDataType = { newPostText: string }
+
+class MyPosts extends React.PureComponent<MyPostsPropsType> {
     render() {
         let {posts, addPost} = this.props;
-        const onAddPostSubmit = (formData) => {
+        const onAddPostSubmit = (formData: FormDataType) => {
             addPost(formData.newPostText)
         }
         return (
@@ -22,8 +25,9 @@ class MyPosts extends React.PureComponent {
     }
 }
 
-const maxLength = maxLengthCreator(10)
-const AddPostForm = (props) => {
+const maxLength: (value: string) => string | undefined = maxLengthCreator(10)
+type AddPostFormPropsType = {}
+const AddPostForm: React.FC<InjectedFormProps<FormDataType, AddPostFormPropsType>> = (props) => {
 
     return (
         <form onSubmit={props.handleSubmit}>
@@ -38,6 +42,6 @@ const AddPostForm = (props) => {
         </form>
     )
 }
-const AddPostReduxForm = reduxForm({form: 'post'})(AddPostForm)
+const AddPostReduxForm = reduxForm<FormDataType, AddPostFormPropsType>({form: 'post'})(AddPostForm)
 
 export default MyPosts

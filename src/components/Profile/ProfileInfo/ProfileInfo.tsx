@@ -1,18 +1,28 @@
-import React, {useState} from "react";
+import React, {FC, useState} from "react";
 import s from './ProfileInfo.module.css'
 import ProfileStatusWithHooks from "./ProfileStatus/ProfileStatusWithHooks";
 import baseProfileImage from './../../../images/userBaseImage.jpg'
 import ProfileDataReduxForm from "./ProfileDataForm/ProfileDataForm";
+import {ContactPropsType, ProfileType} from "../../../types/types";
 
-const ProfileInfo = ({profile, status, isOwner, updateStatus, updateImage, updateProfile}) => {
+type PropsType = {
+    profile: ProfileType
+    status: string
+    isOwner: boolean
+    updateStatus: (status: string) => void
+    updateImage: (file: File) => void
+    updateProfile: (profile: ProfileType) => Promise<void>
+}
+const ProfileInfo: FC<PropsType> = ({profile, status, isOwner, updateStatus, updateImage, updateProfile}) => {
 
     const [editMode, setEditMode] = useState(false)
-    const onAvatarImageSelected = (e) => {
-        if (e.target.files.length) {
+
+    const onAvatarImageSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
             updateImage(e.target.files[0])
         }
     }
-    const onSubmit = (formData) => {
+    const onSubmit = (formData: ProfileType) => {
         console.log(formData)
         // Тут є нюанс. UI не повинен чекати, поки щось у BLL виконається. Маємо зробити dispatch і забути.
         updateProfile(formData).then(() => {
@@ -47,7 +57,13 @@ const ProfileInfo = ({profile, status, isOwner, updateStatus, updateImage, updat
         </div>
     )
 }
-const ProfileData = ({profile, isOwner, setEditMode}) => {
+
+type ProfileDataPropsType = {
+    profile: ProfileType
+    isOwner: boolean
+    setEditMode: (editMode: boolean) => void
+}
+const ProfileData: FC<ProfileDataPropsType> = ({profile, isOwner, setEditMode}) => {
     return (
         <div className={s.info}>
             <div className={s.info__list}>
@@ -94,10 +110,12 @@ const ProfileData = ({profile, isOwner, setEditMode}) => {
     )
 }
 
-const Contact = ({contactTitle, contactValue}) => {
+
+const Contact: FC<ContactPropsType> = ({contactTitle, contactValue}) => {
     return (
         <li className={s.contacts__item}>
-            <a className={s.contacts__link} href={contactValue} rel="noopener noreferrer" target='_blank'>{contactTitle}</a>
+            <a className={s.contacts__link} href={contactValue} rel="noopener noreferrer"
+               target='_blank'>{contactTitle}</a>
         </li>
     );
 };

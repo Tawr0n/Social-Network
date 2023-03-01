@@ -2,9 +2,18 @@ import s from './Profile.module.css'
 import ProfileInfo from "./ProfileInfo/ProfileInfo";
 import MyPostsContainer from "./MyPosts/MyPostsContainer";
 import Preloader from "../UI/Preloader/Preloader";
-import React from "react";
+import React, {FC} from "react";
+import {ProfileType} from "../../types/types";
 
-const Profile = ({profile, status, isOwner, updateStatus, updateImage, updateProfile}) => {
+type PropsType = {
+    profile: ProfileType | null
+    status: string
+    isOwner: boolean
+    updateStatus: (status: string) => void
+    updateImage: (file: File) => void
+    updateProfile: (profile: ProfileType) => Promise<void>
+}
+const Profile: FC<PropsType> = ({profile, status, isOwner, updateStatus, updateImage, updateProfile}) => {
     if (!profile) return <Preloader/>
     return (
         <div className={s.main}>
