@@ -1,5 +1,8 @@
 import {followAPI, usersAPI} from "../api/api";
 import {UserType} from "../types/types";
+import {AppStateType} from "./reduxStore";
+import {Dispatch} from "redux";
+import {ThunkAction} from "redux-thunk";
 
 const FOLLOW_TOGGLE = 'users/FOLLOW_TOGGLE'
 const SET_USERS = 'users/SET_STATE'
@@ -19,7 +22,14 @@ const initialState = {
 }
 type InitialStateType = typeof initialState
 
-const usersReducer = (state = initialState, action: any): InitialStateType => {
+type ActionsTypes =
+    FollowToggleActionType
+    | LoadingToggleActionType
+    | SetUsersActionType
+    | SetActivePageActionType
+    | SetTotalUsersCountActionType
+    | FollowingInProgressToggleActionType
+const usersReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
         case FOLLOW_TOGGLE:
             return {
@@ -64,9 +74,8 @@ const usersReducer = (state = initialState, action: any): InitialStateType => {
         default:
             return state
     }
-
-
 }
+
 type FollowToggleActionType = {
     type: typeof FOLLOW_TOGGLE
     userId: number
@@ -83,7 +92,6 @@ export const loadingToggle = (isLoading: boolean): LoadingToggleActionType => ({
     type: LOADING_TOGGLE,
     isLoading
 })
-
 type SetUsersActionType = {
     type: typeof SET_USERS
     users: Array<UserType>
@@ -117,18 +125,24 @@ export const followingInProgressToggle = (isFollowingInProgress: boolean, userId
     type: FOLLOWING_IN_PROGRESS_TOGGLE,
     isFollowingInProgress, userId
 })
-export const requestUsers = (pageNumber = 1, pageSize = 5) => async (dispatch: any, getState: any) => {
-    dispatch(loadingToggle(true))
-    dispatch(setActivePage(pageNumber))
-    const payload = await usersAPI.getUsers(pageNumber, pageSize)
-    dispatch(setUsers(payload.items))
-    if (!getState().usersPage.totalUsersCount) {
-        dispatch(setTotalUsersCount(payload.totalCount))
+
+type DispatchType = Dispatch<ActionsTypes>
+type GetStateType = () => AppStateType
+type ThunkType = ThunkAction<void, AppStateType, unknown, ActionsTypes>
+export const requestUsers = (pageNumber = 1, pageSize = 5) => {
+    return async (dispatch: DispatchType, getState: GetStateType) => {
+        dispatch(loadingToggle(true))
+        dispatch(setActivePage(pageNumber))
+        const payload = await usersAPI.getUsers(pageNumber, pageSize)
+        dispatch(setUsers(payload.items))
+        if (!getState().usersPage.totalUsersCount) {
+            dispatch(setTotalUsersCount(payload.totalCount))
+        }
+        dispatch(loadingToggle(false))
     }
-    dispatch(loadingToggle(false))
 }
 
-const followUnfollowFunctionality = async (dispatch: any, userId: number, apiMethod: any) => {
+const _followUnfollowFunctionality = async (dispatch: DispatchType, userId: number, apiMethod: any): Promise<void> => {
     dispatch(followingInProgressToggle(true, userId))
     const payload = await apiMethod(userId)
     if (payload.resultCode === 0) {
@@ -136,14 +150,15 @@ const followUnfollowFunctionality = async (dispatch: any, userId: number, apiMet
     }
     dispatch(followingInProgressToggle(false, userId))
 }
-export const follow = (userId: number) => (dispatch: any) => {
+
+export const follow = (userId: number): ThunkType => (dispatch) => {
     const apiMethod = followAPI.follow
-    followUnfollowFunctionality(dispatch, userId, apiMethod)
+    _followUnfollowFunctionality(dispatch, userId, apiMethod)
 
 }
 
-export const unfollow = (userId: number) => (dispatch: any) => {
+export const unfollow = (userId: number): ThunkType => (dispatch) => {
     const apiMethod = followAPI.unfollow
-    followUnfollowFunctionality(dispatch, userId, apiMethod)
+    _followUnfollowFunctionality(dispatch, userId, apiMethod)
 }
 export default usersReducer

@@ -1,4 +1,6 @@
 import {authMe} from "./authReducer";
+import {AppStateType} from "./reduxStore";
+import {ThunkAction} from "redux-thunk";
 
 const INITIALIZED_SUCCESSFULLY = 'app/INITIALIZED_SUCCESSFULLY'
 const ADD_GLOBAL_ERROR = 'app/ADD_GLOBAL_ERROR'
@@ -13,7 +15,7 @@ const initialState: InitialStateType = {
     globalErrors: []
 }
 
-const appReducer = (state = initialState, action: any): InitialStateType => {
+const appReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
         case INITIALIZED_SUCCESSFULLY:
             return {
@@ -36,6 +38,9 @@ const appReducer = (state = initialState, action: any): InitialStateType => {
     }
 
 }
+
+type ActionsTypes = InitializedSuccessfullyActionType | AddGlobalErrorActionType | RemoveGlobalErrorActionType
+
 type InitializedSuccessfullyActionType = {
     type: typeof INITIALIZED_SUCCESSFULLY
 }
@@ -57,7 +62,8 @@ export const removeGlobalError = (): RemoveGlobalErrorActionType => ({
     type: REMOVE_GLOBAL_ERROR
 })
 
-export const initializeApp = () => (dispatch: any) => {
+type ThunkType = ThunkAction<void, AppStateType, unknown, ActionsTypes>
+export const initializeApp = (): ThunkType => (dispatch) => {
     const authMePromise = dispatch(authMe())
     Promise.all([authMePromise])
         .then(() => {

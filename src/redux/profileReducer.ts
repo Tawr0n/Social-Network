@@ -1,6 +1,8 @@
 import {profileAPI} from "../api/api";
-import {stopSubmit} from "redux-form";
+import {FormAction, stopSubmit} from "redux-form";
 import {PhotosType, PostType, ProfileType} from "../types/types";
+import {ThunkAction} from "redux-thunk";
+import {AppStateType} from "./reduxStore";
 
 const ADD_POST = 'profile/ADD_POST'
 const DELETE_POST = 'profile/DELETE_POST'
@@ -18,7 +20,14 @@ const initialState = {
     status: ''
 }
 type InitialStateType = typeof initialState
-const profileReducer = (state = initialState, action: any): InitialStateType => {
+
+type ActionsTypes =
+    AddPostActionType
+    | DeletePostActionType
+    | SetUserProfileActionType
+    | SetStatusActionType
+    | UpdateImageSuccessActionType
+const profileReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
         case ADD_POST:
             if (action.newPostText) {
@@ -99,15 +108,16 @@ const updateImageSuccess = (photos: PhotosType): UpdateImageSuccessActionType =>
     photos
 })
 
-export const getUserProfileData = (userId: number) => async (dispatch: any) => {
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes | FormAction>
+export const getUserProfileData = (userId: number): ThunkType => async (dispatch) => {
     const payload = await profileAPI.getProfileData(userId)
     dispatch(setUserProfile(payload))
 }
-export const getUserStatus = (userId: number) => async (dispatch: any) => {
+export const getUserStatus = (userId: number): ThunkType => async (dispatch) => {
     const payload = await profileAPI.getStatus(userId)
     dispatch(setStatus(payload.data))
 }
-export const updateStatus = (status: string) => async (dispatch: any) => {
+export const updateStatus = (status: string): ThunkType => async (dispatch) => {
     try {
         const payload = await profileAPI.updateStatus(status)
         if (payload.resultCode === 0) {
@@ -117,16 +127,17 @@ export const updateStatus = (status: string) => async (dispatch: any) => {
         throw new Error('Updating status error')
     }
 }
-export const updateImage = (avatarImage: File) => async (dispatch: any) => {
+export const updateImage = (avatarImage: File): ThunkType => async (dispatch) => {
     const payload = await profileAPI.updateProfileImage(avatarImage)
     if (payload.resultCode === 0) {
         dispatch(updateImageSuccess(payload.data.photos))
     }
 }
-export const updateProfile = (profileData: ProfileType) => async (dispatch: any, getState: any) => {
+
+export const updateProfile = (profileData: ProfileType): ThunkType => async (dispatch, getState) => {
     const id = getState().auth.id
     const payload = await profileAPI.updateProfile(profileData)
-    if (payload.resultCode === 0) {
+    if (payload.resultCode === 0 && id) {
         dispatch(getUserProfileData(id))
     } else {
         const errorMessage = payload.messages.length > 0 ? payload.messages : 'Error'

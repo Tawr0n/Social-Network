@@ -29,7 +29,7 @@ const initialState = {
     ] as Array<MessageType>,
 }
 type InitialStateType = typeof initialState
-const messagesReducer = (state = initialState, action: any): InitialStateType => {
+const messagesReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
         case SEND_MESSAGE:
             if (action.newMessage) {
@@ -46,9 +46,8 @@ const messagesReducer = (state = initialState, action: any): InitialStateType =>
         default:
             return state
     }
-
-
 }
+type ActionsTypes = SendMessageActionType
 type SendMessageActionType = {
     type: typeof SEND_MESSAGE
     newMessage: string

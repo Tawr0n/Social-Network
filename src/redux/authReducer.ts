@@ -1,5 +1,7 @@
 import {authAPI, securityAPI} from "../api/api";
 import {stopSubmit} from "redux-form";
+import {ThunkAction} from "redux-thunk";
+import {AppStateType} from "./reduxStore";
 
 const SET_AUTHORIZED_USER_DATA = 'auth/SET_AUTHORIZED_USER_DATA'
 const RESET_AUTHORIZED_USER_DATA = 'auth/RESET_AUTHORIZED_USER_DATA'
@@ -21,7 +23,7 @@ const initialState: InitialStateType = {
     captchaUrl: null
 }
 
-const authReducer = (state = initialState, action: any): InitialStateType => {
+const authReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
         case SET_AUTHORIZED_USER_DATA:
             return {
@@ -44,6 +46,10 @@ const authReducer = (state = initialState, action: any): InitialStateType => {
     }
 
 }
+type ActionsTypes =
+    SetAuthorizedUserDataActionType
+    | ResetAuthorizedUserDataActionType
+    | GetCaptchaUrlSuccessActionType
 type SetAuthorizedUserDataActionPayloadType = {
     id: number
     email: string
@@ -57,7 +63,6 @@ const setAuthorizedUserData = (payload: SetAuthorizedUserDataActionPayloadType):
     type: SET_AUTHORIZED_USER_DATA,
     payload
 })
-
 type ResetAuthorizedUserDataActionType = {
     type: typeof RESET_AUTHORIZED_USER_DATA
 }
@@ -73,7 +78,9 @@ const getCaptchaUrlSuccess = (captchaUrl: string): GetCaptchaUrlSuccessActionTyp
     captchaUrl
 })
 
-export const authMe = () => async (dispatch: any) => {
+
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
+export const authMe = (): ThunkType => async (dispatch) => {
     const payload = await authAPI.authMe()
     if (payload.resultCode === 0) {
         dispatch(setAuthorizedUserData(payload.data))
@@ -86,7 +93,7 @@ type LoginDataType = {
     rememberMe?: boolean
     captcha?: string
 }
-export const login = (loginData: LoginDataType) => async (dispatch: any) => {
+export const login = (loginData: LoginDataType): ThunkType => async (dispatch) => {
     const payload = await authAPI.login(loginData)
     if (payload.resultCode === 0) {
         dispatch(authMe())
@@ -99,14 +106,14 @@ export const login = (loginData: LoginDataType) => async (dispatch: any) => {
     }
 }
 
-export const logout = () => async (dispatch: any) => {
+export const logout = (): ThunkType => async (dispatch) => {
     const payload = await authAPI.logout()
     if (payload.resultCode === 0) {
         dispatch(resetAuthorizedUserData())
     }
 }
 
-export const getCaptchaUrl = () => async (dispatch: any) => {
+export const getCaptchaUrl = (): ThunkType => async (dispatch) => {
     const payload = await securityAPI.getCaptchaUrl()
     const captchaUrl = payload.url
     dispatch(getCaptchaUrlSuccess(captchaUrl))
