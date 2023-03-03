@@ -2,7 +2,7 @@ import React from "react";
 import s from './MyPosts.module.css'
 import Post from "./Post/Post";
 import {Field, InjectedFormProps, reduxForm} from "redux-form";
-import {maxLengthCreator, required} from "../../../validators/validators";
+import {FieldValidatorType, maxLengthCreator, required} from "../../../validators/validators";
 import {CustomField} from "../../UI/FormsControls/FormsControls";
 import {MyPostsPropsType} from "./MyPostsContainer";
 
@@ -25,7 +25,7 @@ class MyPosts extends React.PureComponent<MyPostsPropsType> {
     }
 }
 
-const maxLength: (value: string) => string | undefined = maxLengthCreator(10)
+const maxLength: FieldValidatorType = maxLengthCreator(10)
 type AddPostFormPropsType = {}
 const AddPostForm: React.FC<InjectedFormProps<FormDataType, AddPostFormPropsType>> = (props) => {
 
