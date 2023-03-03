@@ -57,3 +57,19 @@ export type ContactPropsType = {
 }
 
 export type IsActiveType = { isActive: boolean }
+
+export type LoginDataType = {
+    email: string
+    password: string
+    rememberMe?: boolean
+    captcha?: string
+}
+
+export enum ResultCodesEnum {
+    Success = 0,
+    Error = 1
+}
+
+export enum ResultCodesWithCaptcha  {
+    CaptchaIsRequired = 10
+}

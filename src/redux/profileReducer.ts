@@ -1,6 +1,6 @@
 import {profileAPI} from "../api/api";
 import {FormAction, stopSubmit} from "redux-form";
-import {PhotosType, PostType, ProfileType} from "../types/types";
+import {PhotosType, PostType, ProfileType, ResultCodesEnum} from "../types/types";
 import {ThunkAction} from "redux-thunk";
 import {AppStateType} from "./reduxStore";
 
@@ -129,7 +129,7 @@ export const updateStatus = (status: string): ThunkType => async (dispatch) => {
 }
 export const updateImage = (avatarImage: File): ThunkType => async (dispatch) => {
     const payload = await profileAPI.updateProfileImage(avatarImage)
-    if (payload.resultCode === 0) {
+    if (payload.resultCode === ResultCodesEnum.Success) {
         dispatch(updateImageSuccess(payload.data.photos))
     }
 }
@@ -137,7 +137,7 @@ export const updateImage = (avatarImage: File): ThunkType => async (dispatch) =>
 export const updateProfile = (profileData: ProfileType): ThunkType => async (dispatch, getState) => {
     const id = getState().auth.id
     const payload = await profileAPI.updateProfile(profileData)
-    if (payload.resultCode === 0 && id) {
+    if (payload.resultCode === ResultCodesEnum.Success && id) {
         dispatch(getUserProfileData(id))
     } else {
         const errorMessage = payload.messages.length > 0 ? payload.messages : 'Error'

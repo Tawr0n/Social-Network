@@ -1,5 +1,5 @@
 import {followAPI, usersAPI} from "../api/api";
-import {UserType} from "../types/types";
+import {ResultCodesEnum, UserType} from "../types/types";
 import {AppStateType} from "./reduxStore";
 import {Dispatch} from "redux";
 import {ThunkAction} from "redux-thunk";
@@ -145,7 +145,7 @@ export const requestUsers = (pageNumber = 1, pageSize = 5) => {
 const _followUnfollowFunctionality = async (dispatch: DispatchType, userId: number, apiMethod: any): Promise<void> => {
     dispatch(followingInProgressToggle(true, userId))
     const payload = await apiMethod(userId)
-    if (payload.resultCode === 0) {
+    if (payload.resultCode === ResultCodesEnum.Success) {
         dispatch(followToggle(userId))
     }
     dispatch(followingInProgressToggle(false, userId))

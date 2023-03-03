@@ -2,6 +2,7 @@ import {authAPI, securityAPI} from "../api/api";
 import {stopSubmit} from "redux-form";
 import {ThunkAction} from "redux-thunk";
 import {AppStateType} from "./reduxStore";
+import {LoginDataType, ResultCodesEnum, ResultCodesWithCaptcha} from "../types/types";
 
 const SET_AUTHORIZED_USER_DATA = 'auth/SET_AUTHORIZED_USER_DATA'
 const RESET_AUTHORIZED_USER_DATA = 'auth/RESET_AUTHORIZED_USER_DATA'
@@ -82,23 +83,17 @@ const getCaptchaUrlSuccess = (captchaUrl: string): GetCaptchaUrlSuccessActionTyp
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
 export const authMe = (): ThunkType => async (dispatch) => {
     const payload = await authAPI.authMe()
-    if (payload.resultCode === 0) {
+    if (payload.resultCode === ResultCodesEnum.Success) {
         dispatch(setAuthorizedUserData(payload.data))
     }
 }
 
-type LoginDataType = {
-    email: string
-    password: string
-    rememberMe?: boolean
-    captcha?: string
-}
 export const login = (loginData: LoginDataType): ThunkType => async (dispatch) => {
     const payload = await authAPI.login(loginData)
-    if (payload.resultCode === 0) {
+    if (payload.resultCode === ResultCodesEnum.Success) {
         dispatch(authMe())
     } else {
-        if (payload.resultCode === 10) {
+        if (payload.resultCode === ResultCodesWithCaptcha.CaptchaIsRequired) {
             dispatch(getCaptchaUrl())
         }
         const errorMessage = payload.messages.length > 0 ? payload.messages : 'Error'
@@ -108,7 +103,7 @@ export const login = (loginData: LoginDataType): ThunkType => async (dispatch) =
 
 export const logout = (): ThunkType => async (dispatch) => {
     const payload = await authAPI.logout()
-    if (payload.resultCode === 0) {
+    if (payload.resultCode === ResultCodesEnum.Success) {
         dispatch(resetAuthorizedUserData())
     }
 }
