@@ -1,5 +1,5 @@
 import {authMe} from "./authReducer";
-import {AppStateType} from "./reduxStore";
+import {AppStateType, InferActionsTypes} from "./reduxStore";
 import {ThunkAction} from "redux-thunk";
 
 const INITIALIZED_SUCCESSFULLY = 'app/INITIALIZED_SUCCESSFULLY'
@@ -39,35 +39,28 @@ const appReducer = (state = initialState, action: ActionsTypes): InitialStateTyp
 
 }
 
-type ActionsTypes = InitializedSuccessfullyActionType | AddGlobalErrorActionType | RemoveGlobalErrorActionType
+type ActionsTypes = InferActionsTypes<typeof actions>
 
-type InitializedSuccessfullyActionType = {
-    type: typeof INITIALIZED_SUCCESSFULLY
+export const actions = {
+    initializedSuccessfully: () => ({
+        type: INITIALIZED_SUCCESSFULLY
+    } as const),
+    addGlobalError: (errorMessage: string) => ({
+        type: ADD_GLOBAL_ERROR,
+        errorMessage
+    } as const),
+    removeGlobalError: () => ({
+        type: REMOVE_GLOBAL_ERROR
+    } as const)
 }
-const initializedSuccessfully = (): InitializedSuccessfullyActionType => ({
-    type: INITIALIZED_SUCCESSFULLY
-})
-type AddGlobalErrorActionType = {
-    type: typeof ADD_GLOBAL_ERROR
-    errorMessage: string
-}
-export const addGlobalError = (errorMessage: string): AddGlobalErrorActionType => ({
-    type: ADD_GLOBAL_ERROR,
-    errorMessage
-})
-type RemoveGlobalErrorActionType = {
-    type: typeof REMOVE_GLOBAL_ERROR
-}
-export const removeGlobalError = (): RemoveGlobalErrorActionType => ({
-    type: REMOVE_GLOBAL_ERROR
-})
+
 
 type ThunkType = ThunkAction<void, AppStateType, unknown, ActionsTypes>
 export const initializeApp = (): ThunkType => (dispatch) => {
     const authMePromise = dispatch(authMe())
     Promise.all([authMePromise])
         .then(() => {
-            dispatch(initializedSuccessfully())
+            dispatch(actions.initializedSuccessfully())
         })
 }
 

@@ -1,15 +1,15 @@
 import {followAPI, usersAPI} from "../api/api";
 import {ResultCodesEnum, UserType} from "../types/types";
-import {AppStateType} from "./reduxStore";
+import {AppStateType, InferActionsTypes} from "./reduxStore";
 import {Dispatch} from "redux";
 import {ThunkAction} from "redux-thunk";
 
-const FOLLOW_TOGGLE = 'users/FOLLOW_TOGGLE'
-const SET_USERS = 'users/SET_STATE'
-const SET_ACTIVE_PAGE = 'users/SET_ACTIVE_PAGE'
-const SET_TOTAL_USERS_COUNT = 'users/SET_TOTAL_USERS_COUNT'
-const LOADING_TOGGLE = 'users/LOADING_TOGGLE'
-const FOLLOWING_IN_PROGRESS_TOGGLE = 'users/FOLLOWING_IN_PROGRESS_TOGGLE'
+const FOLLOW_TOGGLE = 'social-network/users/FOLLOW_TOGGLE'
+const SET_USERS = 'social-network/users/SET_STATE'
+const SET_ACTIVE_PAGE = 'social-network/users/SET_ACTIVE_PAGE'
+const SET_TOTAL_USERS_COUNT = 'social-network/users/SET_TOTAL_USERS_COUNT'
+const LOADING_TOGGLE = 'social-network/users/LOADING_TOGGLE'
+const FOLLOWING_IN_PROGRESS_TOGGLE = 'social-network/users/FOLLOWING_IN_PROGRESS_TOGGLE'
 
 
 const initialState = {
@@ -22,13 +22,6 @@ const initialState = {
 }
 type InitialStateType = typeof initialState
 
-type ActionsTypes =
-    FollowToggleActionType
-    | LoadingToggleActionType
-    | SetUsersActionType
-    | SetActivePageActionType
-    | SetTotalUsersCountActionType
-    | FollowingInProgressToggleActionType
 const usersReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
         case FOLLOW_TOGGLE:
@@ -75,80 +68,58 @@ const usersReducer = (state = initialState, action: ActionsTypes): InitialStateT
             return state
     }
 }
+type ActionsTypes = InferActionsTypes<typeof actions>
+export const actions = {
+    followToggle: (userId: number) => ({
+        type: FOLLOW_TOGGLE,
+        userId
+    } as const),
+    loadingToggle: (isLoading: boolean) => ({
+        type: LOADING_TOGGLE,
+        isLoading
+    } as const),
+    setUsers: (users: Array<UserType>) => ({
+        type: SET_USERS,
+        users
+    } as const),
+    setActivePage: (activePage: number) => ({
+        type: SET_ACTIVE_PAGE,
+        activePage
+    } as const),
+    setTotalUsersCount: (totalUsersCount: number) => ({
+        type: SET_TOTAL_USERS_COUNT,
+        totalUsersCount
+    } as const),
+    followingInProgressToggle: (isFollowingInProgress: boolean, userId: number) => ({
+        type: FOLLOWING_IN_PROGRESS_TOGGLE,
+        isFollowingInProgress, userId
+    } as const)
+}
 
-type FollowToggleActionType = {
-    type: typeof FOLLOW_TOGGLE
-    userId: number
-}
-export const followToggle = (userId: number): FollowToggleActionType => ({
-    type: FOLLOW_TOGGLE,
-    userId
-})
-type LoadingToggleActionType = {
-    type: typeof LOADING_TOGGLE
-    isLoading: boolean
-}
-export const loadingToggle = (isLoading: boolean): LoadingToggleActionType => ({
-    type: LOADING_TOGGLE,
-    isLoading
-})
-type SetUsersActionType = {
-    type: typeof SET_USERS
-    users: Array<UserType>
-}
-export const setUsers = (users: Array<UserType>): SetUsersActionType => ({
-    type: SET_USERS,
-    users
-})
-type SetActivePageActionType = {
-    type: typeof SET_ACTIVE_PAGE
-    activePage: number
-}
-export const setActivePage = (activePage: number): SetActivePageActionType => ({
-    type: SET_ACTIVE_PAGE,
-    activePage
-})
-type SetTotalUsersCountActionType = {
-    type: typeof SET_TOTAL_USERS_COUNT
-    totalUsersCount: number
-}
-export const setTotalUsersCount = (totalUsersCount: number): SetTotalUsersCountActionType => ({
-    type: SET_TOTAL_USERS_COUNT,
-    totalUsersCount
-})
-type FollowingInProgressToggleActionType = {
-    type: typeof FOLLOWING_IN_PROGRESS_TOGGLE
-    isFollowingInProgress: boolean
-    userId: number
-}
-export const followingInProgressToggle = (isFollowingInProgress: boolean, userId: number): FollowingInProgressToggleActionType => ({
-    type: FOLLOWING_IN_PROGRESS_TOGGLE,
-    isFollowingInProgress, userId
-})
 
 type DispatchType = Dispatch<ActionsTypes>
 type GetStateType = () => AppStateType
 type ThunkType = ThunkAction<void, AppStateType, unknown, ActionsTypes>
 export const requestUsers = (pageNumber = 1, pageSize = 5) => {
     return async (dispatch: DispatchType, getState: GetStateType) => {
-        dispatch(loadingToggle(true))
-        dispatch(setActivePage(pageNumber))
+        dispatch(actions.loadingToggle(true))
+        dispatch(actions.setActivePage(pageNumber))
         const payload = await usersAPI.getUsers(pageNumber, pageSize)
-        dispatch(setUsers(payload.items))
+        dispatch(actions.setUsers(payload.items))
         if (!getState().usersPage.totalUsersCount) {
-            dispatch(setTotalUsersCount(payload.totalCount))
+            dispatch(actions.setTotalUsersCount(payload.totalCount))
         }
-        dispatch(loadingToggle(false))
+        dispatch(actions.loadingToggle(false))
     }
 }
 
 const _followUnfollowFunctionality = async (dispatch: DispatchType, userId: number, apiMethod: any): Promise<void> => {
-    dispatch(followingInProgressToggle(true, userId))
+    dispatch(actions.followingInProgressToggle(true, userId))
     const payload = await apiMethod(userId)
     if (payload.resultCode === ResultCodesEnum.Success) {
-        dispatch(followToggle(userId))
+        dispatch(actions.followToggle(userId))
     }
-    dispatch(followingInProgressToggle(false, userId))
+    dispatch(actions.followingInProgressToggle(false, userId))
 }
 
 export const follow = (userId: number): ThunkType => (dispatch) => {

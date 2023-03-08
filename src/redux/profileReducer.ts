@@ -2,7 +2,7 @@ import {profileAPI} from "../api/api";
 import {FormAction, stopSubmit} from "redux-form";
 import {PhotosType, PostType, ProfileType, ResultCodesEnum} from "../types/types";
 import {ThunkAction} from "redux-thunk";
-import {AppStateType} from "./reduxStore";
+import {AppStateType, InferActionsTypes} from "./reduxStore";
 
 const ADD_POST = 'profile/ADD_POST'
 const DELETE_POST = 'profile/DELETE_POST'
@@ -21,12 +21,7 @@ const initialState = {
 }
 type InitialStateType = typeof initialState
 
-type ActionsTypes =
-    AddPostActionType
-    | DeletePostActionType
-    | SetUserProfileActionType
-    | SetStatusActionType
-    | UpdateImageSuccessActionType
+
 const profileReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
         case ADD_POST:
@@ -67,61 +62,45 @@ const profileReducer = (state = initialState, action: ActionsTypes): InitialStat
     }
 
 }
-type AddPostActionType = {
-    type: typeof ADD_POST
-    newPostText: string
+type ActionsTypes = InferActionsTypes<typeof actions>
+export const actions = {
+    addPost: (newPostText: string) => ({
+        type: ADD_POST,
+        newPostText
+    } as const),
+    deletePost: (postId: number) => ({
+        type: DELETE_POST,
+        postId
+    } as const),
+    setUserProfile: (profile: ProfileType) => ({
+        type: SET_USER_PROFILE,
+        profile
+    } as const),
+    setStatus: (status: string) => ({
+        type: SET_STATUS,
+        status
+    } as const),
+    updateImageSuccess: (photos: PhotosType) => ({
+        type: UPDATE_IMAGE_SUCCESS,
+        photos
+    } as const)
 }
-export const addPost = (newPostText: string): AddPostActionType => ({
-    type: ADD_POST,
-    newPostText
-})
-type DeletePostActionType = {
-    type: typeof DELETE_POST
-    postId: number
-}
-export const deletePost = (postId: number): DeletePostActionType => ({
-    type: DELETE_POST,
-    postId
-})
-type SetUserProfileActionType = {
-    type: typeof SET_USER_PROFILE
-    profile: ProfileType
-}
-export const setUserProfile = (profile: ProfileType): SetUserProfileActionType => ({
-    type: SET_USER_PROFILE,
-    profile
-})
-type SetStatusActionType = {
-    type: typeof SET_STATUS
-    status: string
-}
-export const setStatus = (status: string): SetStatusActionType => ({
-    type: SET_STATUS,
-    status
-})
-type UpdateImageSuccessActionType = {
-    type: typeof UPDATE_IMAGE_SUCCESS
-    photos: PhotosType
-}
-const updateImageSuccess = (photos: PhotosType): UpdateImageSuccessActionType => ({
-    type: UPDATE_IMAGE_SUCCESS,
-    photos
-})
+
 
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes | FormAction>
 export const getUserProfileData = (userId: number): ThunkType => async (dispatch) => {
     const payload = await profileAPI.getProfileData(userId)
-    dispatch(setUserProfile(payload))
+    dispatch(actions.setUserProfile(payload))
 }
 export const getUserStatus = (userId: number): ThunkType => async (dispatch) => {
     const payload = await profileAPI.getStatus(userId)
-    dispatch(setStatus(payload.data))
+    dispatch(actions.setStatus(payload.data))
 }
 export const updateStatus = (status: string): ThunkType => async (dispatch) => {
     try {
         const payload = await profileAPI.updateStatus(status)
         if (payload.resultCode === 0) {
-            dispatch(setStatus(status))
+            dispatch(actions.setStatus(status))
         }
     } catch (e) {
         throw new Error('Updating status error')
@@ -130,7 +109,7 @@ export const updateStatus = (status: string): ThunkType => async (dispatch) => {
 export const updateImage = (avatarImage: File): ThunkType => async (dispatch) => {
     const payload = await profileAPI.updateProfileImage(avatarImage)
     if (payload.resultCode === ResultCodesEnum.Success) {
-        dispatch(updateImageSuccess(payload.data.photos))
+        dispatch(actions.updateImageSuccess(payload.data.photos))
     }
 }
 

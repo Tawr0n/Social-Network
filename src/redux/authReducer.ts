@@ -1,7 +1,7 @@
 import {authAPI, securityAPI} from "../api/api";
 import {stopSubmit} from "redux-form";
 import {ThunkAction} from "redux-thunk";
-import {AppStateType} from "./reduxStore";
+import {AppStateType, InferActionsTypes} from "./reduxStore";
 import {LoginDataType, ResultCodesEnum, ResultCodesWithCaptcha} from "../types/types";
 
 const SET_AUTHORIZED_USER_DATA = 'auth/SET_AUTHORIZED_USER_DATA'
@@ -47,44 +47,32 @@ const authReducer = (state = initialState, action: ActionsTypes): InitialStateTy
     }
 
 }
-type ActionsTypes =
-    SetAuthorizedUserDataActionType
-    | ResetAuthorizedUserDataActionType
-    | GetCaptchaUrlSuccessActionType
+type ActionsTypes = InferActionsTypes<typeof actions>
 type SetAuthorizedUserDataActionPayloadType = {
     id: number
     email: string
     login: string
 }
-type SetAuthorizedUserDataActionType = {
-    type: typeof SET_AUTHORIZED_USER_DATA
-    payload: SetAuthorizedUserDataActionPayloadType
+export const actions = {
+    setAuthorizedUserData: (payload: SetAuthorizedUserDataActionPayloadType) => ({
+        type: SET_AUTHORIZED_USER_DATA,
+        payload
+    } as const),
+    resetAuthorizedUserData: () => ({
+        type: RESET_AUTHORIZED_USER_DATA
+    } as const),
+    getCaptchaUrlSuccess: (captchaUrl: string) => ({
+        type: GET_CAPTCHA_URL_SUCCESS,
+        captchaUrl
+    } as const)
 }
-const setAuthorizedUserData = (payload: SetAuthorizedUserDataActionPayloadType): SetAuthorizedUserDataActionType => ({
-    type: SET_AUTHORIZED_USER_DATA,
-    payload
-})
-type ResetAuthorizedUserDataActionType = {
-    type: typeof RESET_AUTHORIZED_USER_DATA
-}
-const resetAuthorizedUserData = (): ResetAuthorizedUserDataActionType => ({
-    type: RESET_AUTHORIZED_USER_DATA
-})
-type GetCaptchaUrlSuccessActionType = {
-    type: typeof GET_CAPTCHA_URL_SUCCESS
-    captchaUrl: string
-}
-const getCaptchaUrlSuccess = (captchaUrl: string): GetCaptchaUrlSuccessActionType => ({
-    type: GET_CAPTCHA_URL_SUCCESS,
-    captchaUrl
-})
 
 
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
 export const authMe = (): ThunkType => async (dispatch) => {
     const payload = await authAPI.authMe()
     if (payload.resultCode === ResultCodesEnum.Success) {
-        dispatch(setAuthorizedUserData(payload.data))
+        dispatch(actions.setAuthorizedUserData(payload.data))
     }
 }
 
@@ -104,14 +92,14 @@ export const login = (loginData: LoginDataType): ThunkType => async (dispatch) =
 export const logout = (): ThunkType => async (dispatch) => {
     const payload = await authAPI.logout()
     if (payload.resultCode === ResultCodesEnum.Success) {
-        dispatch(resetAuthorizedUserData())
+        dispatch(actions.resetAuthorizedUserData())
     }
 }
 
 export const getCaptchaUrl = (): ThunkType => async (dispatch) => {
     const payload = await securityAPI.getCaptchaUrl()
     const captchaUrl = payload.url
-    dispatch(getCaptchaUrlSuccess(captchaUrl))
+    dispatch(actions.getCaptchaUrlSuccess(captchaUrl))
 }
 
 export default authReducer
