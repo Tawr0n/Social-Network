@@ -1,15 +1,6 @@
 import {authMe} from "./authReducer";
-import {AppStateType, InferActionsTypes} from "./reduxStore";
-import {ThunkAction} from "redux-thunk";
+import {InferActionsTypes, ThunkType} from "./reduxStore";
 
-const INITIALIZED_SUCCESSFULLY = 'app/INITIALIZED_SUCCESSFULLY'
-const ADD_GLOBAL_ERROR = 'app/ADD_GLOBAL_ERROR'
-const REMOVE_GLOBAL_ERROR = 'app/REMOVE_GLOBAL_ERROR'
-
-type InitialStateType = {
-    isInitialized: boolean
-    globalErrors: Array<string>
-}
 const initialState: InitialStateType = {
     isInitialized: false,
     globalErrors: []
@@ -17,17 +8,17 @@ const initialState: InitialStateType = {
 
 const appReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
-        case INITIALIZED_SUCCESSFULLY:
+        case 'social-network/app/INITIALIZED_SUCCESSFULLY':
             return {
                 ...state,
                 isInitialized: true
             }
-        case ADD_GLOBAL_ERROR:
+        case 'social-network/app/ADD_GLOBAL_ERROR':
             return {
                 ...state,
                 globalErrors: [...state.globalErrors, action.errorMessage]
             }
-        case REMOVE_GLOBAL_ERROR:
+        case 'social-network/app/REMOVE_GLOBAL_ERROR':
             state.globalErrors.shift()
             return {
                 ...state,
@@ -39,24 +30,20 @@ const appReducer = (state = initialState, action: ActionsTypes): InitialStateTyp
 
 }
 
-type ActionsTypes = InferActionsTypes<typeof actions>
-
 export const actions = {
     initializedSuccessfully: () => ({
-        type: INITIALIZED_SUCCESSFULLY
+        type: 'social-network/app/INITIALIZED_SUCCESSFULLY'
     } as const),
     addGlobalError: (errorMessage: string) => ({
-        type: ADD_GLOBAL_ERROR,
+        type: 'social-network/app/ADD_GLOBAL_ERROR',
         errorMessage
     } as const),
     removeGlobalError: () => ({
-        type: REMOVE_GLOBAL_ERROR
+        type: 'social-network/app/REMOVE_GLOBAL_ERROR'
     } as const)
 }
 
-
-type ThunkType = ThunkAction<void, AppStateType, unknown, ActionsTypes>
-export const initializeApp = (): ThunkType => (dispatch) => {
+export const initializeApp = (): ThunkType<ActionsTypes, void> => (dispatch) => {
     const authMePromise = dispatch(authMe())
     Promise.all([authMePromise])
         .then(() => {
@@ -64,5 +51,10 @@ export const initializeApp = (): ThunkType => (dispatch) => {
         })
 }
 
-
 export default appReducer
+
+type InitialStateType = {
+    isInitialized: boolean
+    globalErrors: Array<string>
+}
+type ActionsTypes = InferActionsTypes<typeof actions>

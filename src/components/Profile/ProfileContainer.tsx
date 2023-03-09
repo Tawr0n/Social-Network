@@ -19,8 +19,8 @@ type MapStatePropsType = {
     authorizedUserId: number | null
 }
 type MapDispatchPropsType = {
-    getUserProfileData: (userId: number | null) => void
-    getUserStatus: (userId: number | null) => void
+    getUserProfileData: (userId: number) => void
+    getUserStatus: (userId: number) => void
     updateStatus: (status: string) => void
     updateImage: (file: File) => void
     updateProfile: (profile: ProfileType) => Promise<void>
@@ -37,20 +37,25 @@ type PropsType = MapStatePropsType & MapDispatchPropsType & OwnPropsType & WithR
 type StateType = {}
 
 class ProfileContainer extends React.Component<PropsType, StateType> {
+    refreshProfile = (userId: number | null) => {
+        if (userId) {
+            this.props.getUserProfileData(userId)
+            this.props.getUserStatus(userId)
+        } else {
+            console.error('Id must exists in URI params or in state (\'authorizedUserId\')')
+        }
+    }
+
     componentDidMount() {
         let userId: number | null = +this.props.router.params.userId
         if (!userId) userId = this.props.authorizedUserId
 
-        if (userId) {
-            this.props.getUserProfileData(userId)
-            this.props.getUserStatus(userId)
-        }
+        this.refreshProfile(userId)
     }
 
     componentDidUpdate(prevProps: PropsType, prevState: StateType) {
         if (this.props.router.params.userId !== prevProps.router.params.userId) {
-            this.props.getUserProfileData(this.props.authorizedUserId)
-            this.props.getUserStatus(this.props.authorizedUserId)
+            this.refreshProfile(this.props.authorizedUserId)
         }
     }
 
@@ -74,7 +79,7 @@ function withRouter<Props extends WithRouterProps>(Component: React.ComponentTyp
         let params = useParams();
         return (
             <Component
-                {...(props as Props)}
+                {...props as Props}
                 router={{location, navigate, params}}
             />
         );

@@ -10,7 +10,7 @@ import Login from "./components/Login/Login";
 import React, {Component, Suspense} from "react";
 import {connect, Provider} from "react-redux";
 import Preloader from "./components/UI/Preloader/Preloader";
-import {addGlobalError, initializeApp, removeGlobalError} from "./redux/appReducer";
+import {actions, initializeApp} from "./redux/appReducer";
 import store, {AppStateType} from "./redux/reduxStore";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -34,9 +34,23 @@ type TOwnProps = {
 type PropsType = TStateProps & TDispatchProps & TOwnProps
 
 class App extends Component<PropsType> {
-    // e: PromiseRejectionEvent & ErrorEvent
-    catchAllUnhandledErrors = (e: any) => {
-        let errorMessage = e.message ? e.message : e.reason.message;
+    catchAllUnhandledErrors = (e: PromiseRejectionEvent) => {
+        let errorMessage = e.reason.message
+        this.props.addGlobalError(errorMessage)
+        toast.error(errorMessage, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            onClose: () => this.props.removeGlobalError()
+        })
+    }
+    catchAllErrors = (e: ErrorEvent) => {
+        let errorMessage = e.message
         this.props.addGlobalError(errorMessage)
         toast.error(errorMessage, {
             position: "bottom-right",
@@ -54,12 +68,12 @@ class App extends Component<PropsType> {
     componentDidMount() {
         this.props.initializeApp()
         window.addEventListener("unhandledrejection", this.catchAllUnhandledErrors)
-        window.addEventListener("error", this.catchAllUnhandledErrors)
+        window.addEventListener("error", this.catchAllErrors)
     }
 
     componentWillUnmount() {
         window.removeEventListener("unhandledrejection", this.catchAllUnhandledErrors)
-        window.removeEventListener("error", this.catchAllUnhandledErrors)
+        window.removeEventListener("error", this.catchAllErrors)
     }
 
     render() {
@@ -101,11 +115,11 @@ const mapStateToProps = (state: AppStateType): TStateProps => ({
 })
 const AppContainer = connect<TStateProps, TDispatchProps, TOwnProps, AppStateType>(mapStateToProps, {
     initializeApp,
-    addGlobalError,
-    removeGlobalError
+    addGlobalError: actions.addGlobalError,
+    removeGlobalError: actions.removeGlobalError
 })(App);
 
-const AppContainerWrapper = () => {
+const AppContainerWrapper: React.FC = () => {
     return (
         // <React.StrictMode>
         <BrowserRouter>

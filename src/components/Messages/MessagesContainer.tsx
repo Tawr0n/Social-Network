@@ -1,10 +1,11 @@
-import {sendMessage} from "../../redux/messagesReducer";
+import {actions} from "../../redux/messagesReducer";
 import Messages from "./Messages";
 import {connect} from "react-redux";
 import withAuthRedirect from "../../hoc/withAuthRedirect";
 import {compose} from "redux";
 import {DialogType, MessageType} from "../../types/types";
 import {AppStateType} from "../../redux/reduxStore";
+import React from "react";
 
 
 type TStateProps = {
@@ -21,9 +22,9 @@ const mapStateToProps = (state: AppStateType): TStateProps => ({
     dialogs: state.messagesPage.dialogs
 })
 
-export default compose(
+export default compose<React.ComponentType>(
     withAuthRedirect,
     connect<TStateProps, TDispatchProps, TOwnProps, AppStateType>(mapStateToProps, {
-        sendMessage,
+        ...actions
     })
 )(Messages);

@@ -1,8 +1,10 @@
 import s from './Navigation.module.css'
 import {NavLink} from "react-router-dom";
+import {IsActiveType} from "../../../types/types";
+import React from "react";
 
-const isActive = ({isActive}) => isActive ? s.link_active : s.link
-const Navigation = () => {
+const isActive = ({isActive}: IsActiveType) => isActive ? s.link_active : s.link
+const Navigation: React.FC = () => {
     return (
         <nav className={s.nav}>
             <ul className={s.nav__links}>

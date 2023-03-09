@@ -6,28 +6,28 @@ import {FieldValidatorType, maxLengthCreator, required} from "../../../validator
 import {CustomField} from "../../UI/FormsControls/FormsControls";
 import {MyPostsPropsType} from "./MyPostsContainer";
 
-type FormDataType = { newPostText: string }
+type NewPostFormType = { newPostText: string }
 
 class MyPosts extends React.PureComponent<MyPostsPropsType> {
     render() {
         let {posts, addPost} = this.props;
-        const onAddPostSubmit = (formData: FormDataType) => {
+        const onAddPostSubmit = (formData: NewPostFormType) => {
             addPost(formData.newPostText)
         }
         return (
             <div className={`main__posts ${s.posts}`}>
                 <h2 className={s.posts__title}>MyPosts</h2>
                 <AddPostReduxForm onSubmit={onAddPostSubmit}/>
-                {posts.map(p => <Post id={p.id} message={p.message} likesCount={p.likesCount} key={p.id}/>)}
+                {posts.map(p => <Post post={p} key={p.id}/>)}
             </div>
 
         )
     }
 }
 
-const maxLength: FieldValidatorType = maxLengthCreator(10)
-type AddPostFormPropsType = {}
-const AddPostForm: React.FC<InjectedFormProps<FormDataType, AddPostFormPropsType>> = (props) => {
+const maxLength: FieldValidatorType = maxLengthCreator(100)
+
+const AddPostForm: React.FC<InjectedFormProps<NewPostFormType>> = (props) => {
 
     return (
         <form onSubmit={props.handleSubmit}>
@@ -42,6 +42,6 @@ const AddPostForm: React.FC<InjectedFormProps<FormDataType, AddPostFormPropsType
         </form>
     )
 }
-const AddPostReduxForm = reduxForm<FormDataType, AddPostFormPropsType>({form: 'post'})(AddPostForm)
+const AddPostReduxForm = reduxForm<NewPostFormType>({form: 'post'})(AddPostForm)
 
 export default MyPosts

@@ -1,7 +1,13 @@
 import s from './Header.module.css'
 import {Link} from "react-router-dom";
+import {InitialAuthStateType} from "../../redux/authReducer";
+import React from "react";
 
-const Header = ({authData, logout}) => {
+type PropsType = {
+    authData: InitialAuthStateType,
+    logout: () => void
+}
+const Header: React.FC<PropsType> = ({authData, logout}) => {
     return (
         <header className={s.header}>
             <div className={s.header__logo}>

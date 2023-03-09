@@ -18,13 +18,13 @@ const ProfileInfo: FC<PropsType> = ({profile, status, isOwner, updateStatus, upd
     const [editMode, setEditMode] = useState(false)
 
     const onAvatarImageSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
+        if (e.target.files?.length) {
             updateImage(e.target.files[0])
         }
     }
     const onSubmit = (formData: ProfileType) => {
-        console.log(formData)
         // Тут є нюанс. UI не повинен чекати, поки щось у BLL виконається. Маємо зробити dispatch і забути.
+        // todo: remove then
         updateProfile(formData).then(() => {
             setEditMode(false)
         })

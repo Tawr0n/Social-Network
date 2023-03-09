@@ -1,14 +1,16 @@
-import profileReducer, {addPost, deletePost} from "./profileReducer";
+import profileReducer, {actions} from "./profileReducer";
 
 
 test('length of posts should be increased by one', () => {
     // 1. test data
-    let action = addPost('Ukraine')
+    let action = actions.addPost('Ukraine')
     let state = {
         posts: [
             {id: 1, message: 'Слизерин', likesCount: 41},
             {id: 2, message: 'Рейвенклов', likesCount: 59},
-        ]
+        ],
+        profile: null,
+        status: ''
     }
     // 2.action
     let newState = profileReducer(state, action)
@@ -18,12 +20,14 @@ test('length of posts should be increased by one', () => {
 });
 test('message of a new post should be correct', () => {
     // 1. test data
-    let action = addPost('Ukraine')
+    let action = actions.addPost('Ukraine')
     let state = {
         posts: [
             {id: 1, message: 'Слизерин', likesCount: 41},
             {id: 2, message: 'Рейвенклов', likesCount: 59},
-        ]
+        ],
+        profile: null,
+        status: ''
     }
     // 2.action
     let newState = profileReducer(state, action)
@@ -33,12 +37,14 @@ test('message of a new post should be correct', () => {
 });
 test('length of posts should be reduced by one', () => {
     // 1. test data
-    let action = deletePost(1)
+    let action = actions.deletePost(1)
     let state = {
         posts: [
             {id: 1, message: 'Слизерин', likesCount: 41},
             {id: 2, message: 'Рейвенклов', likesCount: 59},
-        ]
+        ],
+        profile: null,
+        status: ''
     }
     // 2.action
     let newState = profileReducer(state, action)

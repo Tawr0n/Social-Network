@@ -7,10 +7,10 @@ import {CustomField} from "../UI/FormsControls/FormsControls";
 import {FieldValidatorType, maxLengthCreator, required} from "../../validators/validators";
 import {MessagesPropsType} from "./MessagesContainer";
 
-type FormDataType = { newMessageText: string }
+type NewMessageFormType = { newMessageText: string }
 const Messages: FC<MessagesPropsType> = ({messages, dialogs, sendMessage}) => {
 
-    const addNewMessage = (formData: FormDataType) => {
+    const addNewMessage = (formData: NewMessageFormType) => {
         sendMessage(formData.newMessageText)
     }
 
@@ -28,7 +28,7 @@ const Messages: FC<MessagesPropsType> = ({messages, dialogs, sendMessage}) => {
         </section>);
 };
 const maxLength: FieldValidatorType = maxLengthCreator(10)
-const SendMessageForm: React.FC<InjectedFormProps<FormDataType>> = (props) => {
+const SendMessageForm: React.FC<InjectedFormProps<NewMessageFormType>> = (props) => {
     return (
         <form onSubmit={props.handleSubmit} className={s.chat__form}>
             <Field validate={[required, maxLength]} name={'newMessageText'} className={s.chat__input}
@@ -38,6 +38,6 @@ const SendMessageForm: React.FC<InjectedFormProps<FormDataType>> = (props) => {
         </form>
     )
 }
-const SendMessageReduxForm = reduxForm<FormDataType>({form: 'dialog'})(SendMessageForm)
+const SendMessageReduxForm = reduxForm<NewMessageFormType>({form: 'dialog'})(SendMessageForm)
 
 export default Messages;

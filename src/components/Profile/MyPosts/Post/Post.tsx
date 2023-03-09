@@ -1,6 +1,12 @@
 import s from './Post.module.css'
+import {PostType} from "../../../../types/types";
+import {FC} from "react";
 
-const Post = (props) => {
+
+type PropsType = {
+    post: PostType
+}
+const Post: FC<PropsType> = ({post}) => {
     return (
         <div className={s.post}>
             <div className={s.post__avatar}>
@@ -9,8 +15,8 @@ const Post = (props) => {
                     alt=""/>
             </div>
             <div className={s.post__info}>
-                <p className={'post__message'}>{props.message}</p>
-                <p className={'post__likes'}>Вподобайка - {props.likesCount}</p>
+                <p className={'post__message'}>{post.message}</p>
+                <p className={'post__likes'}>Вподобайка - {post.likesCount}</p>
             </div>
         </div>
     )

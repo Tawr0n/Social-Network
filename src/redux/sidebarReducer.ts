@@ -1,8 +1,5 @@
 import {FriendType} from "../types/types";
 
-type InitialStateType = {
-    friends: Array<FriendType>
-}
 const initialState: InitialStateType = {
     friends: [
         {
@@ -29,3 +26,7 @@ const sidebarReducer = (state = initialState, action: any): InitialStateType => 
 }
 
 export default sidebarReducer
+
+type InitialStateType = {
+    friends: Array<FriendType>
+}

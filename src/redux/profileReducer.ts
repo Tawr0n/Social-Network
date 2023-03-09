@@ -1,8 +1,8 @@
-import {profileAPI} from "../api/api";
 import {FormAction, stopSubmit} from "redux-form";
-import {PhotosType, PostType, ProfileType, ResultCodesEnum} from "../types/types";
-import {ThunkAction} from "redux-thunk";
-import {AppStateType, InferActionsTypes} from "./reduxStore";
+import {PhotosType, PostType, ProfileType} from "../types/types";
+import {InferActionsTypes, ThunkType} from "./reduxStore";
+import {profileAPI} from "../api/profileAPI";
+import {ResultCodesEnum} from "../api/api";
 
 const ADD_POST = 'profile/ADD_POST'
 const DELETE_POST = 'profile/DELETE_POST'
@@ -19,7 +19,6 @@ const initialState = {
     profile: null as ProfileType | null,
     status: ''
 }
-type InitialStateType = typeof initialState
 
 
 const profileReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
@@ -62,7 +61,7 @@ const profileReducer = (state = initialState, action: ActionsTypes): InitialStat
     }
 
 }
-type ActionsTypes = InferActionsTypes<typeof actions>
+
 export const actions = {
     addPost: (newPostText: string) => ({
         type: ADD_POST,
@@ -87,41 +86,44 @@ export const actions = {
 }
 
 
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes | FormAction>
-export const getUserProfileData = (userId: number): ThunkType => async (dispatch) => {
-    const payload = await profileAPI.getProfileData(userId)
-    dispatch(actions.setUserProfile(payload))
+export const getUserProfileData = (userId: number): ThunkType<ActionsTypes> => async (dispatch) => {
+    const data = await profileAPI.getProfileData(userId)
+    dispatch(actions.setUserProfile(data))
 }
-export const getUserStatus = (userId: number): ThunkType => async (dispatch) => {
-    const payload = await profileAPI.getStatus(userId)
-    dispatch(actions.setStatus(payload.data))
+export const getUserStatus = (userId: number): ThunkType<ActionsTypes> => async (dispatch) => {
+    const data = await profileAPI.getStatus(userId)
+    dispatch(actions.setStatus(data.data))
 }
-export const updateStatus = (status: string): ThunkType => async (dispatch) => {
+export const updateStatus = (status: string): ThunkType<ActionsTypes> => async (dispatch) => {
     try {
-        const payload = await profileAPI.updateStatus(status)
-        if (payload.resultCode === 0) {
+        const data = await profileAPI.updateStatus(status)
+        if (data.resultCode === 0) {
             dispatch(actions.setStatus(status))
         }
     } catch (e) {
         throw new Error('Updating status error')
     }
 }
-export const updateImage = (avatarImage: File): ThunkType => async (dispatch) => {
-    const payload = await profileAPI.updateProfileImage(avatarImage)
-    if (payload.resultCode === ResultCodesEnum.Success) {
-        dispatch(actions.updateImageSuccess(payload.data.photos))
+export const updateImage = (avatarImage: File): ThunkType<ActionsTypes> => async (dispatch) => {
+    const data = await profileAPI.updateProfileImage(avatarImage)
+    if (data.resultCode === ResultCodesEnum.Success) {
+        dispatch(actions.updateImageSuccess(data.data.photos))
     }
 }
 
-export const updateProfile = (profileData: ProfileType): ThunkType => async (dispatch, getState) => {
+export const updateProfile = (profileData: ProfileType): ThunkType<ActionsTypes | FormAction> => async (dispatch, getState) => {
     const id = getState().auth.id
-    const payload = await profileAPI.updateProfile(profileData)
-    if (payload.resultCode === ResultCodesEnum.Success && id) {
+    const data = await profileAPI.updateProfile(profileData)
+    if (data.resultCode === ResultCodesEnum.Success && id) {
         dispatch(getUserProfileData(id))
     } else {
-        const errorMessage = payload.messages.length > 0 ? payload.messages : 'Error'
+        const errorMessage = data.messages.length > 0 ? data.messages : 'Error'
         dispatch(stopSubmit('profileData', {_error: errorMessage}))
         return Promise.reject(errorMessage)
     }
 }
 export default profileReducer
+
+type InitialStateType = typeof initialState
+type ActionsTypes = InferActionsTypes<typeof actions>
+

@@ -65,11 +65,3 @@ export type LoginDataType = {
     captcha?: string
 }
 
-export enum ResultCodesEnum {
-    Success = 0,
-    Error = 1
-}
-
-export enum ResultCodesWithCaptcha  {
-    CaptchaIsRequired = 10
-}
