@@ -3,7 +3,7 @@ import {AppStateType, InferActionsTypes, ThunkType} from "./reduxStore";
 import {Dispatch} from "redux";
 import {usersAPI} from "../api/usersApi";
 import {followAPI} from "../api/followAPI";
-import {ResultCodesEnum} from "../api/api";
+import {APIResponseType, ResultCodesEnum} from "../api/api";
 
 const FOLLOW_TOGGLE = 'social-network/users/FOLLOW_TOGGLE'
 const SET_USERS = 'social-network/users/SET_STATE'
@@ -110,7 +110,8 @@ export const requestUsers = (pageNumber = 1, pageSize = 5) => {
     }
 }
 
-const _followUnfollowFunctionality = async (dispatch: DispatchType, userId: number, apiMethod: any): Promise<void> => {
+const _followUnfollowFunctionality = async (dispatch: DispatchType, userId: number,
+                                            apiMethod: (userId: number) => Promise<APIResponseType>): Promise<void> => {
     dispatch(actions.followingInProgressToggle(true, userId))
     const data = await apiMethod(userId)
     if (data.resultCode === ResultCodesEnum.Success) {
@@ -119,19 +120,19 @@ const _followUnfollowFunctionality = async (dispatch: DispatchType, userId: numb
     dispatch(actions.followingInProgressToggle(false, userId))
 }
 
-export const follow = (userId: number): ThunkType<ActionsTypes, void> => (dispatch) => {
+export const follow = (userId: number): ThunkType<ActionsTypes, void> => async (dispatch) => {
     const apiMethod = followAPI.follow
-    _followUnfollowFunctionality(dispatch, userId, apiMethod)
+    await _followUnfollowFunctionality(dispatch, userId, apiMethod)
 
 }
 
-export const unfollow = (userId: number): ThunkType<ActionsTypes, void> => (dispatch) => {
+export const unfollow = (userId: number): ThunkType<ActionsTypes, void> => async (dispatch) => {
     const apiMethod = followAPI.unfollow
-    _followUnfollowFunctionality(dispatch, userId, apiMethod)
+    await _followUnfollowFunctionality(dispatch, userId, apiMethod)
 }
 export default usersReducer
 
-type InitialStateType = typeof initialState
+export type InitialStateType = typeof initialState
 type ActionsTypes = InferActionsTypes<typeof actions>
 type DispatchType = Dispatch<ActionsTypes>
 type GetStateType = () => AppStateType
