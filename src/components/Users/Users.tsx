@@ -4,6 +4,8 @@ import User from "./User/User";
 import Preloader from "../UI/Preloader/Preloader";
 import Pagination from "../UI/Pagination/Pagination";
 import {UserType} from "../../types/types";
+import {UsersSearchForm} from "./UsersSearchForm";
+import {FilterType} from "../../redux/usersReducer";
 
 type PropsType = {
     users: Array<UserType>
@@ -15,11 +17,13 @@ type PropsType = {
     unfollow: (id: number) => void
     followingInProgress: Array<number>
     onPageClick: (pageNumber: number) => void
+    onFilterChanged: (filter: FilterType) => void
 }
 const Users: React.FC<PropsType> = (props) => {
 
     return (
         <section className={s.users}>
+            <UsersSearchForm onFilterChanged={props.onFilterChanged}/>
             <Pagination totalItemsCount={props.totalUsersCount} pageSize={props.pageSize}
                         activePage={props.activePage} onPageClick={props.onPageClick} portionSize={5}/>
             {props.isLoading
@@ -32,4 +36,5 @@ const Users: React.FC<PropsType> = (props) => {
         </section>
     )
 }
+
 export default Users;

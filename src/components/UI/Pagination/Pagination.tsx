@@ -23,14 +23,16 @@ const Pagination: React.FC<PropsType> = ({
         pages.push(i)
     }
     let slicedPages: Array<number>
-    if (activePage < Math.floor(portionSize / 2) + 1) {
+    if (pagesCount <= portionSize) {
+        slicedPages = pages.slice(0, portionSize)
+    } else if (activePage < Math.floor(portionSize / 2) + 1) {
         slicedPages = pages.slice(0, portionSize)
     } else if (pagesCount - activePage < Math.ceil(portionSize / 2)) {
         slicedPages = pages.slice(pagesCount - portionSize, pagesCount)
     } else {
         slicedPages = pages.slice(activePage - Math.floor(portionSize / 2) - 1, activePage + Math.ceil(portionSize / 2) - 1)
     }
-
+    if (!totalItemsCount) return <div>Нікого не знайдено</div>
     return (
         <div className={s.pagination}>
 

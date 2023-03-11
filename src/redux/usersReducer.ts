@@ -8,6 +8,7 @@ import {APIResponseType, ResultCodesEnum} from "../api/api";
 const FOLLOW_TOGGLE = 'social-network/users/FOLLOW_TOGGLE'
 const SET_USERS = 'social-network/users/SET_STATE'
 const SET_ACTIVE_PAGE = 'social-network/users/SET_ACTIVE_PAGE'
+const SET_FILTER = 'social-network/users/SET_FILTER'
 const SET_TOTAL_USERS_COUNT = 'social-network/users/SET_TOTAL_USERS_COUNT'
 const LOADING_TOGGLE = 'social-network/users/LOADING_TOGGLE'
 const FOLLOWING_IN_PROGRESS_TOGGLE = 'social-network/users/FOLLOWING_IN_PROGRESS_TOGGLE'
@@ -20,6 +21,10 @@ const initialState = {
     activePage: 1,
     isLoading: false,
     followingInProgress: [] as Array<number>, //array of users id
+    filter: {
+        term: '',
+        friend: null as boolean | null
+    }
 }
 
 
@@ -47,6 +52,11 @@ const usersReducer = (state = initialState, action: ActionsTypes): InitialStateT
             return {
                 ...state,
                 activePage: action.activePage
+            }
+        case SET_FILTER:
+            return {
+                ...state,
+                filter: action.payload
             }
         case SET_TOTAL_USERS_COUNT:
             return {
@@ -94,18 +104,21 @@ export const actions = {
     followingInProgressToggle: (isFollowingInProgress: boolean, userId: number) => ({
         type: FOLLOWING_IN_PROGRESS_TOGGLE,
         isFollowingInProgress, userId
+    } as const),
+    setFilter: (filter: FilterType) => ({
+        type: SET_FILTER,
+        payload: filter
     } as const)
 }
 
-export const requestUsers = (pageNumber = 1, pageSize = 5) => {
+export const requestUsers = (pageNumber: number, pageSize: number, filter: FilterType) => {
     return async (dispatch: DispatchType, getState: GetStateType) => {
         dispatch(actions.loadingToggle(true))
         dispatch(actions.setActivePage(pageNumber))
-        const data = await usersAPI.getUsers(pageNumber, pageSize)
+        dispatch(actions.setFilter(filter))
+        const data = await usersAPI.getUsers(pageNumber, pageSize, filter.term, filter.friend)
         dispatch(actions.setUsers(data.items))
-        if (!getState().usersPage.totalUsersCount) {
-            dispatch(actions.setTotalUsersCount(data.totalCount))
-        }
+        dispatch(actions.setTotalUsersCount(data.totalCount))
         dispatch(actions.loadingToggle(false))
     }
 }
@@ -133,6 +146,7 @@ export const unfollow = (userId: number): ThunkType<ActionsTypes, void> => async
 export default usersReducer
 
 export type InitialStateType = typeof initialState
+export type FilterType = typeof initialState.filter
 type ActionsTypes = InferActionsTypes<typeof actions>
 type DispatchType = Dispatch<ActionsTypes>
 type GetStateType = () => AppStateType

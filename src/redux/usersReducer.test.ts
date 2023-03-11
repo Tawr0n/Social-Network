@@ -25,7 +25,11 @@ beforeEach(() => {
         pageSize: 5,
         activePage: 1,
         isLoading: false,
-        followingInProgress: []
+        followingInProgress: [],
+        filter: {
+            term: '',
+            friend: null
+        }
     }
 })
 

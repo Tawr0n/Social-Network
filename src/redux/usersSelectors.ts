@@ -28,3 +28,9 @@ export const getIsLoading = (state: AppStateType) => {
 export const getFollowingInProgress = (state: AppStateType) => {
     return state.usersPage.followingInProgress
 }
+
+export const getUsersFilterSelector = (state: AppStateType) => {
+    return state.usersPage.filter
+}
+
+export const getUsersFilter = createSelector(getUsersFilterSelector, (filter) => filter)

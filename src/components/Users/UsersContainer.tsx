@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
 import Users from "./Users";
-import {follow, requestUsers, unfollow} from "../../redux/usersReducer";
+import {FilterType, follow, requestUsers, unfollow} from "../../redux/usersReducer";
 import React from "react";
 import {
     getActivePage,
@@ -8,7 +8,7 @@ import {
     getIsLoading,
     getPageSize,
     getTotalUsersCount,
-    getUsers,
+    getUsers, getUsersFilter,
 } from "../../redux/usersSelectors";
 import {UserType} from "../../types/types";
 import {AppStateType} from "../../redux/reduxStore";
@@ -21,9 +21,10 @@ type MapStatePropsType = {
     activePage: number
     isLoading: boolean
     followingInProgress: Array<number>
+    filter: FilterType
 }
 type MapDispatchPropsType = {
-    requestUsers: (pageNumber: number, pageSize: number) => void
+    requestUsers: (pageNumber: number, pageSize: number, filter: FilterType) => void
     follow: (id: number) => void
     unfollow: (id: number) => void
 }
@@ -33,11 +34,15 @@ type PropsType = MapStatePropsType & MapDispatchPropsType & OwnPropsType
 class UsersContainer extends React.Component<PropsType> {
 
     componentDidMount() {
-        this.props.requestUsers(this.props.activePage, this.props.pageSize)
+        this.props.requestUsers(this.props.activePage, this.props.pageSize, this.props.filter)
     }
 
     onPageClick = (pageNumber: number) => {
-        this.props.requestUsers(pageNumber, this.props.pageSize)
+        this.props.requestUsers(pageNumber, this.props.pageSize, this.props.filter)
+    }
+
+    onFilterChanged = (filter: FilterType) => {
+        this.props.requestUsers(1, this.props.pageSize, filter)
     }
 
     render() {
@@ -46,7 +51,8 @@ class UsersContainer extends React.Component<PropsType> {
                       isLoading={this.props.isLoading}
                       follow={this.props.follow} unfollow={this.props.unfollow}
                       followingInProgress={this.props.followingInProgress}
-                      onPageClick={this.onPageClick}/>
+                      onPageClick={this.onPageClick}
+                      onFilterChanged={this.onFilterChanged}/>
     }
 }
 
@@ -58,6 +64,7 @@ const mapStateToProps = (state: AppStateType): MapStatePropsType => ({
     activePage: getActivePage(state),
     isLoading: getIsLoading(state),
     followingInProgress: getFollowingInProgress(state),
+    filter: getUsersFilter(state)
 })
 
 // TStateProps = {}, TDispatchProps = {}, TOwnProps = {}, State = DefaultState

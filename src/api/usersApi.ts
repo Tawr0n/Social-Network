@@ -8,8 +8,9 @@ interface GetUsersResponseType {
 }
 
 export const usersAPI = {
-    getUsers(activePage = 1, pageSize = 10) {
-        return instance.get<GetUsersResponseType>(`users?page=${activePage}&count=${pageSize}`)
+    getUsers(activePage = 1, pageSize = 10, term: string = '', friend: null | boolean = null) {
+        return instance.get<GetUsersResponseType>(`users?page=${activePage}&count=${pageSize}&term=${term}`
+            + (friend === null ? '' : `&friend=${friend}`))
             .then(res => res.data)
     },
 }
