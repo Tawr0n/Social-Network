@@ -6,7 +6,6 @@ import Music from "./components/Music/Music";
 import Settings from "./components/Settings/Settings";
 import ProfileContainer from "./components/Profile/ProfileContainer";
 import HeaderContainer from "./components/Header/HeaderContainer";
-import Login from "./components/Login/Login";
 import React, {Component, Suspense} from "react";
 import {connect, Provider} from "react-redux";
 import Preloader from "./components/UI/Preloader/Preloader";
@@ -14,8 +13,9 @@ import {actions, initializeApp} from "./redux/appReducer";
 import store, {AppStateType} from "./redux/reduxStore";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import {LoginPage} from "./components/Login/LoginPage";
 
-const UsersContainer = React.lazy(() => import('./components/Users/UsersContainer'));
+const UsersPage = React.lazy(() => import('./components/Users/UsersPage').then(module => ({default: module.UsersPage})));
 const MessagesContainer = React.lazy(() => import('./components/Messages/MessagesContainer'));
 
 
@@ -91,11 +91,11 @@ class App extends Component<PropsType> {
                                 <Route path={'/messages'} element={<MessagesContainer/>}>
                                     <Route path={'*'} element={<MessagesContainer/>}/>
                                 </Route>
-                                <Route path={'/users'} element={<UsersContainer/>}/>
+                                <Route path={'/users'} element={<UsersPage/>}/>
                                 <Route path={'/news'} element={<News/>}/>
                                 <Route path={'/music'} element={<Music/>}/>
                                 <Route path={'/settings'} element={<Settings/>}/>
-                                <Route path={'/login'} element={<Login/>}/>
+                                <Route path={'/login'} element={<LoginPage/>}/>
                                 <Route path={'/'} element={<Navigate to={'/profile'}/>}/>
                                 <Route path="*" element={<div style={{color: "red", padding: "10px"}}>404 not
                                     found</div>}/>
