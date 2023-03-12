@@ -1,25 +1,28 @@
 import React, {FC, useEffect, useState} from "react";
 import s from './ProfileStatus.module.css'
+import {useAppDispatch, useAppSelector} from "../../../../redux/reduxStore";
+import {getStatus} from "../../../../redux/profileSelectors";
+import {updateStatus} from "../../../../redux/profileReducer";
 
 type PropsType = {
-    status: string
     isOwner: boolean
-    updateStatus: (status: string) => void
 }
 const ProfileStatusWithHooks: FC<PropsType> = (props) => {
+    const statusProps = useAppSelector(getStatus)
+    const dispatch = useAppDispatch()
     // якщо useState проініціалізований, то можна тип не уточнювати
-    const [status, setStatus] = useState<string>(props.status)
+    const [status, setStatus] = useState<string>(statusProps)
     const [editMode, setEditMode] = useState<boolean>(false)
     useEffect(() => {
-        setStatus(props.status)
-    }, [props.status])
+        setStatus(statusProps)
+    }, [statusProps])
 
     const activateEditMode = () => {
         if (props.isOwner) setEditMode(true)
     }
     const deactivateEditMode = () => {
         setEditMode(false)
-        props.updateStatus(status)
+        dispatch(updateStatus(status))
     }
     const onStatusChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
         setStatus(event.currentTarget.value)
@@ -33,7 +36,7 @@ const ProfileStatusWithHooks: FC<PropsType> = (props) => {
                          value={status} autoFocus={true}/>
                 :
                 <span onDoubleClick={activateEditMode}
-                      className={s.status__text}>{props.status || '❔'}</span>
+                      className={s.status__text}>{statusProps || '❔'}</span>
             }
         </div>
     )

@@ -6,7 +6,9 @@ const getUsersSelector = (state: AppStateType) => {
 }
 
 export const getUsers = createSelector(getUsersSelector, (users) => {
-    return users.filter(u => u)
+    return users.filter(u => u) //Фільтр лише для прикладу, аби показати, що компонента усе одно лишній
+    // раз не рендериться, адже реселект звіряє вхідні дані, чи вони не змінилися. І якщо змінилися, то
+    // тільки тоді викликає колбек функцію з логікою
 })
 
 export const getPageSize = (state: AppStateType) => {
@@ -29,8 +31,6 @@ export const getFollowingInProgress = (state: AppStateType) => {
     return state.usersPage.followingInProgress
 }
 
-export const getUsersFilterSelector = (state: AppStateType) => {
+export const getUsersFilter = (state: AppStateType) => {
     return state.usersPage.filter
 }
-
-export const getUsersFilter = createSelector(getUsersFilterSelector, (filter) => filter)

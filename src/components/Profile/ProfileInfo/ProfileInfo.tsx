@@ -4,28 +4,27 @@ import ProfileStatusWithHooks from "./ProfileStatus/ProfileStatusWithHooks";
 import baseProfileImage from './../../../images/userBaseImage.jpg'
 import ProfileDataReduxForm from "./ProfileDataForm/ProfileDataForm";
 import {ContactPropsType, ProfileType} from "../../../types/types";
+import {useAppDispatch} from "../../../redux/reduxStore";
+import {updateImage, updateProfile} from "../../../redux/profileReducer";
 
 type PropsType = {
     profile: ProfileType
-    status: string
     isOwner: boolean
-    updateStatus: (status: string) => void
-    updateImage: (file: File) => void
-    updateProfile: (profile: ProfileType) => Promise<void>
 }
-const ProfileInfo: FC<PropsType> = ({profile, status, isOwner, updateStatus, updateImage, updateProfile}) => {
-
+const ProfileInfo: FC<PropsType> = ({profile, isOwner}) => {
+    const dispatch = useAppDispatch()
     const [editMode, setEditMode] = useState(false)
 
     const onAvatarImageSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files?.length) {
-            updateImage(e.target.files[0])
+            dispatch(updateImage(e.target.files[0]))
         }
     }
     const onSubmit = (formData: ProfileType) => {
         // Тут є нюанс. UI не повинен чекати, поки щось у BLL виконається. Маємо зробити dispatch і забути.
         // todo: remove then
-        updateProfile(formData).then(() => {
+        // @ts-ignore
+        dispatch(updateProfile(formData)).then(() => {
             setEditMode(false)
         })
     }
@@ -53,7 +52,7 @@ const ProfileInfo: FC<PropsType> = ({profile, status, isOwner, updateStatus, upd
 
 
             </div>
-            <ProfileStatusWithHooks status={status} updateStatus={updateStatus} isOwner={isOwner}/>
+            <ProfileStatusWithHooks isOwner={isOwner}/>
         </div>
     )
 }

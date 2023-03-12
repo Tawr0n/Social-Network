@@ -15,9 +15,11 @@ import {
     getUsersFilter
 } from "../../redux/usersSelectors";
 import {useAppDispatch, useAppSelector} from "../../redux/reduxStore";
+import {useLocation, useNavigate} from "react-router-dom";
+import queryString from "query-string";
 
-type PropsType = {}
-export const UsersPage: React.FC<PropsType> = (props) => {
+type QueryParamsType = { term?: string, page?: string, friend?: string }
+export const UsersPage: React.FC = () => {
     const users = useAppSelector(getUsers)
     const pageSize = useAppSelector(getPageSize)
     const totalUsersCount = useAppSelector(getTotalUsersCount)
@@ -27,10 +29,37 @@ export const UsersPage: React.FC<PropsType> = (props) => {
     const followingInProgress = useAppSelector(getFollowingInProgress)
 
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
+    const location = useLocation()
+
 
     useEffect(() => {
-        requestUsers(activePage, pageSize, filter)
+        const parsed = queryString.parse(location.search) as QueryParamsType
+
+        let actualPage = activePage
+        let actualFilter = filter
+        if (parsed.page) actualPage = Number(parsed.page)
+        if (parsed.term) actualFilter = {...actualFilter, term: parsed.term as string}
+        if (parsed.friend) {
+            actualFilter = {
+                ...actualFilter,
+                friend: parsed.friend === 'null' ? null : parsed.friend === 'true'
+            }
+        }
+        dispatch(requestUsers(actualPage, pageSize, actualFilter))
     }, [])
+    useEffect(() => {
+        const query: QueryParamsType = {}
+        if (filter.term) query.term = filter.term
+        if (filter.friend !== null) query.friend = String(filter.friend)
+        if (activePage !== 1) query.page = String(activePage)
+
+        navigate({
+            pathname: '/users',
+            search: queryString.stringify(query)
+        })
+    }, [filter, activePage])
+
 
     const onPageClick = (pageNumber: number) => {
         dispatch(requestUsers(pageNumber, pageSize, filter))
