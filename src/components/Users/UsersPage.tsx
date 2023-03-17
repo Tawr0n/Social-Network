@@ -55,7 +55,7 @@ export const UsersPage: React.FC = () => {
         if (activePage !== 1) query.page = String(activePage)
 
         navigate({
-            pathname: '/users',
+            pathname: '/developers',
             search: queryString.stringify(query)
         })
     }, [filter, activePage])

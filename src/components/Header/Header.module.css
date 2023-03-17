@@ -33,6 +33,7 @@
     background-image: linear-gradient(235deg, #FCCF31 10%, #F55555 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    font-size: 17px;
     font-weight: 700;
     animation: login 5s linear infinite;
 }
@@ -50,6 +51,6 @@
         background-position: left 0 top 0;
     }
     100% {
-        background-position: left 63px top 0;
+        background-position: left 58px top 0;
     }
 }
