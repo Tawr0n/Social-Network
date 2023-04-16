@@ -21,6 +21,7 @@ import {Breadcrumb, Layout, Menu, theme} from 'antd';
 
 const UsersPage = React.lazy(() => import('./components/Users/UsersPage').then(module => ({default: module.UsersPage})));
 const MessagesContainer = React.lazy(() => import('./components/Messages/MessagesContainer'));
+const ChatPage = React.lazy(() => import('./pages/Chat/ChatPage').then(module => ({default: module.ChatPage})));
 
 
 type TStateProps = {
@@ -36,7 +37,6 @@ type TOwnProps = {
     state: AppStateType
 }
 type PropsType = TStateProps & TDispatchProps & TOwnProps
-
 
 
 const {Content, Footer, Sider} = Layout;
@@ -68,6 +68,7 @@ const items: MenuProps['items'] = [
     {type: 'divider'},
     getItem('Developers', 'Developers', <LaptopOutlined/>, [
         getItem(<Link to="/developers">Users</Link>, 'Users'),
+        getItem(<Link to="/chat">Chat</Link>, 'Chat'),
     ]),
     {type: 'divider'},
     getItem('Setting', 'sub4', <SettingOutlined/>, [
@@ -152,6 +153,7 @@ const App: React.FC<PropsType> = (props) => {
                                 <Route path={'/music'} element={<Music/>}/>
                                 <Route path={'/settings'} element={<Settings/>}/>
                                 <Route path={'/login'} element={<LoginPage/>}/>
+                                <Route path={'/chat'} element={<ChatPage/>}/>
                                 <Route path={'/'} element={<Navigate to={'/profile'}/>}/>
                                 <Route path="*" element={<div style={{color: "red", padding: "10px"}}>404 not
                                     found</div>}/>
