@@ -8,6 +8,7 @@ import thunk, {ThunkAction} from "redux-thunk";
 import {reducer as formReducer} from 'redux-form';
 import appReducer from "./appReducer";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
+import chatReducer from "./chatReducer";
 
 
 const rootReducer = combineReducers({
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
     sidebar: sidebarReducer,
     auth: authReducer,
     form: formReducer,
-    app: appReducer
+    app: appReducer,
+    chat: chatReducer
 })
 
 type RootReducerType = typeof rootReducer
